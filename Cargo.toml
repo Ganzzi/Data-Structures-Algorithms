@@ -1,6 +1,7 @@
 [workspace]
 
 members = [ 
+    "src/deque", 
     "src/queue", 
     "src/stack",
 ]

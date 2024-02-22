@@ -11,6 +11,9 @@ This Rust project aims to implement various data structures and algorithms to he
 2. Queue:
    - Hot Potato Game: Simulates the "Hot Potato" game where players pass a potato around in a circle.
 
+3. Deque: 
+   - Palindrome checker: Checks if a given string is a palindrome (A palindrome is a word, phrase, number, or other sequence of characters that reads the same forward and backward.)
+
 ## Usage
 
 To use these functionalities, simply import the respective modules into your Rust code and utilize the provided functions. Example usage is provided in each module's documentation.
