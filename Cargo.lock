@@ -17,3 +17,10 @@ version = "0.1.0"
 [[package]]
 name = "stack"
 version = "0.1.0"
+
+[[package]]
+name = "vec"
+version = "0.1.0"
+dependencies = [
+ "linked_list",
+]

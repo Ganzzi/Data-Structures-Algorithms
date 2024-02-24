@@ -1,12 +1,13 @@
 /// Type alias for a singly linked list node with an optional next node.
-type Next<T> = Option<Box<Node<T>>>;
+pub type Next<T> = Option<Box<Node<T>>>;
 
 /// Represents a node in a singly linked list.
+#[derive(Debug)]
 pub struct Node<T> {
     /// The data stored in the node.
-    data: T,
+    pub data: T,
     /// Pointer to the next node in the linked list.
-    next: Next<T>,
+    pub next: Next<T>,
 }
 
 impl<T> Node<T> {
@@ -34,7 +35,7 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use my_module::LinkedList;
+    /// use linked_list::LinkedList;
     ///
     /// let list: LinkedList<i32> = LinkedList::new();
     /// assert_eq!(list.size(), 0);
@@ -52,7 +53,7 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use my_module::LinkedList;
+    /// use linked_list::LinkedList;
     ///
     /// let mut list = LinkedList::new(0);
     /// list.push(1);
@@ -73,7 +74,7 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use my_module::LinkedList;
+    /// use linked_list::LinkedList;
     ///
     /// let mut list = LinkedList::new(0);
     /// list.push(1);
@@ -97,7 +98,7 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use my_module::LinkedList;
+    /// use linked_list::LinkedList;
     ///
     /// let mut list = LinkedList::new(0);
     /// list.push(1);
@@ -116,7 +117,7 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use my_module::LinkedList;
+    /// use linked_list::LinkedList;
     ///
     /// let mut list = LinkedList::new(0);
     /// list.push(1);
@@ -138,7 +139,7 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use my_module::LinkedList;
+    /// use linked_list::LinkedList;
     ///
     /// let mut list = LinkedList::new(0);
     /// assert_eq!(list.is_empty(), true);
@@ -158,7 +159,7 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use my_module::LinkedList;
+    /// use linked_list::LinkedList;
     ///
     /// let mut list = LinkedList::new(0);
     /// assert_eq!(list.size(), 0);
@@ -174,7 +175,7 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use my_module::LinkedList;
+    /// use linked_list::LinkedList;
     ///
     /// let mut list = LinkedList::new(0);
     /// list.push(1);
@@ -195,7 +196,7 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use my_module::LinkedList;
+    /// use linked_list::LinkedList;
     ///
     /// let mut list = LinkedList::new(0);
     /// list.push(1);
@@ -220,7 +221,7 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use my_module::LinkedList;
+    /// use linked_list::LinkedList;
     ///
     /// let mut list = LinkedList::new(0);
     /// list.push(1);
@@ -247,7 +248,7 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use my_module::LinkedList;
+    /// use linked_list::LinkedList;
     ///
     /// let mut list = LinkedList::new(0);
     /// list.push(1);

@@ -16,7 +16,7 @@ pub type LinkedStack<T> = LinkedList<T>;
 /// # Examples
 ///
 /// ```
-/// use my_module::{LinkedStack, parenthese_checker};
+/// use linked_list::{LinkedStack, parenthese_checker};
 ///
 /// assert_eq!(parenthese_checker("()"), true);
 /// assert_eq!(parenthese_checker("(())"), true);
