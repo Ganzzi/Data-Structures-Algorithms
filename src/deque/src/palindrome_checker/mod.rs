@@ -15,7 +15,7 @@ use crate::deque::Deque;
 /// # Examples
 ///
 /// ```
-/// use my_module::{Deque, palindrome_checker};
+/// use deque::{Deque, palindrome_checker};
 ///
 /// let palindrome1 = "radar";
 /// let palindrome2 = "level";

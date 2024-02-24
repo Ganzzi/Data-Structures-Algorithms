@@ -11,7 +11,7 @@
 /// # Examples
 ///
 /// ```
-/// use my_module::Stack;
+/// use stack::Stack;
 ///
 /// let mut stack: Stack<i32> = Stack::new();
 ///

@@ -13,7 +13,7 @@
 /// # Examples
 ///
 /// ```
-/// use my_module::Queue;
+/// use queue::Queue;
 ///
 /// let mut queue: Queue<i32> = Queue::new(5);
 ///

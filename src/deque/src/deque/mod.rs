@@ -12,7 +12,7 @@
 /// # Examples
 ///
 /// ```
-/// use my_module::Deque;
+/// use deque::Deque;
 ///
 /// let mut deque: Deque<i32> = Deque::new(5);
 ///

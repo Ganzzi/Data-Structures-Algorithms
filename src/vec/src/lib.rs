@@ -1,4 +1,3 @@
 // --- region: modules
-pub mod linked_list;
-pub mod linked_stack;
+pub mod vec;
 // --- endregion: modules
