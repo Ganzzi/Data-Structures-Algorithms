@@ -14,6 +14,10 @@ This Rust project aims to implement various data structures and algorithms to he
 3. Deque: 
    - Palindrome checker: Checks if a given string is a palindrome (A palindrome is a word, phrase, number, or other sequence of characters that reads the same forward and backward.)
 
+4. Linked List:
+   - Linked Stack: A stack data structure implemented using a linked list. It follows the Last-In-First-Out (LIFO) principle and offers dynamic memory allocation. Linked stacks are ideal for managing data with unpredictable sizes and provide efficient push and pop operations.
+   - Parentheses Checker: Checks whether a given string of parentheses is balanced using linked stack.
+
 ## Usage
 
 To use these functionalities, simply import the respective modules into your Rust code and utilize the provided functions. Example usage is provided in each module's documentation.
