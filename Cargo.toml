@@ -3,7 +3,7 @@
 members = [ 
     "src/deque", 
     "src/linked_list", 
-    "src/queue", 
+    "src/queue", "src/recursion", 
     "src/stack", 
     "src/vec",
 ]

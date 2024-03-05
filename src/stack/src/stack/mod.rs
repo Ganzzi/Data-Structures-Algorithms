@@ -24,6 +24,7 @@
 ///
 /// assert_eq!(popped, Ok(2));
 /// ```
+#[derive(Debug)]
 pub struct Stack<T> {
     data: Vec<T>,
 }

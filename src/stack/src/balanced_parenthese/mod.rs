@@ -38,7 +38,7 @@ pub fn parenthese_checker_1(string: &str) -> bool {
             if stack.is_empty() {
                 is_balanced = false;
             } else {
-                stack.pop();
+                let _ = stack.pop();
             }
         }
         index+=1;
