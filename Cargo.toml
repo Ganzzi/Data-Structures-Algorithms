@@ -3,7 +3,9 @@
 members = [ 
     "src/deque", 
     "src/linked_list", 
-    "src/queue", "src/recursion", 
+    "src/queue", 
+    "src/recursion", 
+    "src/searching", 
     "src/stack", 
     "src/vec",
 ]
