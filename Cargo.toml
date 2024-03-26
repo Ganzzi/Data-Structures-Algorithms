@@ -1,7 +1,7 @@
 [workspace]
 
 members = [ 
-    "src/deque", 
+    "src/deque", "src/hash_map", 
     "src/linked_list", 
     "src/queue", 
     "src/recursion", 
