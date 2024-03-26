@@ -1,23 +1,20 @@
+use hash_map::hash_map::HashMap;
 // --- region: imports
-use std::time::Instant;
 use searching::{
-    binary_search::{
-        binary_search, 
-        recursive_binary_search
-    },
+    binary_search::{binary_search, recursive_binary_search},
     exponential_search::exponential_search,
     interpolation_search::interpolation_search,
-    sequential_search::{
-        ordered_sequential_search, 
-        sequential_search
-    },
+    sequential_search::{ordered_sequential_search, sequential_search},
 };
+use std::time::Instant;
 // --- endregion: imports
 
 fn main() {
-    let nums = [1, 2,  3, 4, 6, 7, 8, 9, 10, 15, 16, 17, 19, 21, 23, 24, 27, 28, 29, 30, 32, 35, 38, 39, 42, 45, 56, 57, 58, 59, 61, 69, 73, 75];
+    let nums = [
+        1, 2, 3, 4, 6, 7, 8, 9, 10, 15, 16, 17, 19, 21, 23, 24, 27, 28, 29, 30, 32, 35, 38, 39, 42,
+        45, 56, 57, 58, 59, 61, 69, 73, 75,
+    ];
     let target = 56;
-
 
     // SEQUENTIAL SEARCH
     println!("\n\n***SEQUENTIAL SEARCH***");
@@ -39,8 +36,6 @@ fn main() {
     let duration = start.elapsed();
     println!("-->Time: {:?} ns", duration.as_nanos());
 
-
-
     // BINARY SEARCH
     println!("\n\n***BINARY SEARCH***");
     let start = Instant::now();
@@ -60,8 +55,6 @@ fn main() {
     let duration = start.elapsed();
     println!("-->Time: {:?} ns", duration.as_nanos());
 
-
-
     // INTERPOLATION SEARCH
     println!("\n\n***INTERPOLATION SEARCH***");
     let start = Instant::now();
@@ -73,8 +66,6 @@ fn main() {
     let duration = start.elapsed();
     println!("-->Time: {:?} ns", duration.as_nanos());
 
-
-
     // EXPONENTIAL SEARCH
     println!("\n\n***EXPONENTIAL SEARCH***");
     let start = Instant::now();
@@ -85,4 +76,20 @@ fn main() {
     );
     let duration = start.elapsed();
     println!("-->Time: {:?} ns", duration.as_nanos());
+
+    // HASH SEARCH
+    println!("\n\n***HASH SEARCH***");
+    let mut hash_map = HashMap::<i32, usize>::new(nums.len()); // Choose a capacity for your hash map
+    for (index, &num) in nums.iter().enumerate() {
+        hash_map.insert(&num, &index);
+    }
+
+    let start = Instant::now();
+    let hash_search_result = hash_map.index_of(&target);
+    println!(
+        "> Hash search - hash_search_result: {:?}",
+        hash_search_result
+    );
+    let duration = start.elapsed();
+    println!("--> Time: {:?} ns", duration.as_nanos());
 }

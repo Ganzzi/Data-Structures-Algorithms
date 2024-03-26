@@ -28,6 +28,9 @@ dependencies = [
 [[package]]
 name = "searching"
 version = "0.1.0"
+dependencies = [
+ "hash_map",
+]
 
 [[package]]
 name = "stack"
