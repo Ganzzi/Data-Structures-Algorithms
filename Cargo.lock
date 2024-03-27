@@ -7,6 +7,10 @@ name = "deque"
 version = "0.1.0"
 
 [[package]]
+name = "hash_map"
+version = "0.1.0"
+
+[[package]]
 name = "linked_list"
 version = "0.1.0"
 
@@ -19,6 +23,13 @@ name = "recursion"
 version = "0.1.0"
 dependencies = [
  "stack",
+]
+
+[[package]]
+name = "searching"
+version = "0.1.0"
+dependencies = [
+ "hash_map",
 ]
 
 [[package]]

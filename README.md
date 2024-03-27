@@ -28,6 +28,13 @@ This Rust project aims to implement various data structures and algorithms to he
    - Fibonacci: Calculate the nth Fibonacci number using recursion and dynamic programming (bottom-up & top-down approach) approach.
    - Minimum number of coins to make change problem: find the minimum nummber of coins needed to make a given change using recursion, recursion & memorization and dynamic programming approach.
 
+7. Searching:
+   - Sequential Search: Sequentially searches through the elements of a collection until the target element is found or the end of the collection is reached. It's simple but less efficient for large collections.
+   - Binary Search: Utilizes a divide-and-conquer strategy on a sorted collection to quickly locate a target element by repeatedly dividing the search interval in half until the element is found or determined to be absent. It's highly efficient but requires the collection to be sorted.
+   - Exponential Search: A hybrid searching algorithm that combines binary search and sequential search. It works by finding a range where the target element may be present using exponential increments, then performing binary search within that range. It's useful for unbounded or infinite collections.
+   - Interpolation Search: An improved version of binary search that works on uniformly distributed sorted collections. It estimates the position of the target element by extrapolating from the values of the endpoints of the collection and performs binary search accordingly. It's particularly effective for large collections with evenly distributed values.
+   - Hash Search: Utilizes a hash function to map keys to indices in a data structure, typically a hash table or hashmap. It provides constant-time average case complexity for insertion, deletion, and retrieval operations, making it highly efficient for large collections when implemented properly. However, it relies on a good hash function and may have collisions.
+
 ## Usage
 
 To use these functionalities, simply import the respective modules into your Rust code and utilize the provided functions. Example usage is provided in each module's documentation.
