@@ -1,10 +1,17 @@
 use hash_map::hash_map::HashMap;
 // --- region: imports
 use searching::{
-    binary_search::{binary_search, recursive_binary_search},
-    exponential_search::exponential_search,
-    interpolation_search::interpolation_search,
-    sequential_search::{ordered_sequential_search, sequential_search},
+    sequential_search::{
+        ordered_sequential_search, 
+        sequential_search
+    },
+    binary_search::{
+        binary_search, 
+        recursive_binary_search
+    }, 
+    exponential_search::exponential_search, 
+    interpolation_search::interpolation_search, 
+    hash_search::hash_search, 
 };
 use std::time::Instant;
 // --- endregion: imports
@@ -79,13 +86,13 @@ fn main() {
 
     // HASH SEARCH
     println!("\n\n***HASH SEARCH***");
-    let mut hash_map = HashMap::<i32, usize>::new(nums.len()); // Choose a capacity for your hash map
+    let mut hash_map = HashMap::new(nums.len());
     for (index, &num) in nums.iter().enumerate() {
         hash_map.insert(&num, &index);
     }
-
+    
     let start = Instant::now();
-    let hash_search_result = hash_map.index_of(&target);
+    let hash_search_result = hash_search(&hash_map, target);
     println!(
         "> Hash search - hash_search_result: {:?}",
         hash_search_result
