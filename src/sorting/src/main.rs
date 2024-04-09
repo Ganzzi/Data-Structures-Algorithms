@@ -1,6 +1,9 @@
 use std::time::Instant;
 
-use sorting::bubble_sort::{bubble_sort, bubble_sort2};
+use sorting::{
+    bubble_sort::{bubble_sort, bubble_sort2},
+    cocktail_sort::cocktail_sort,
+};
 
 fn main() {
     let nums = [
@@ -20,6 +23,15 @@ fn main() {
     let start = Instant::now();
     bubble_sort2(&mut test_nums);
     println!(">bubble sort 2: {:?}", test_nums);
+    let duration = start.elapsed();
+    println!("-->Time: {:?} ns", duration.as_nanos());
+
+    // COCKTAIL SORT
+    println!("\n\n***COCKTAIL SORT***");
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    cocktail_sort(&mut test_nums);
+    println!(">cocktail sort: {:?}", test_nums);
     let duration = start.elapsed();
     println!("-->Time: {:?} ns", duration.as_nanos());
 }
