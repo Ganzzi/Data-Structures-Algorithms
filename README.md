@@ -35,6 +35,12 @@ This Rust project aims to implement various data structures and algorithms to he
    - Interpolation Search: An improved version of binary search that works on uniformly distributed sorted collections. It estimates the position of the target element by extrapolating from the values of the endpoints of the collection and performs binary search accordingly. It's particularly effective for large collections with evenly distributed values.
    - Hash Search: Utilizes a hash function to map keys to indices in a data structure, typically a hash table or hashmap. It provides constant-time average case complexity for insertion, deletion, and retrieval operations, making it highly efficient for large collections when implemented properly. However, it relies on a good hash function and may have collisions.
 
+8. Sorting:
+   - Bubble sort: A simple comparison-based sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order.
+   - Cocktail sort: Also known as bidirectional bubble sort or shaker sort, it is a variation of the bubble sort algorithm that sorts in both directions, from the beginning to the end and from the end to the beginning.
+   - Comb sort: A relatively simple comparison-based sorting algorithm that improves upon bubble sort by eliminating small values at the end of the list more efficiently.
+   - Simplest sort: A basic sorting algorithm that compares each element of the list with every other element and swaps them if they are out of order. It is not efficient and is typically used for educational purposes rather than practical sorting.
+
 ## Usage
 
 To use these functionalities, simply import the respective modules into your Rust code and utilize the provided functions. Example usage is provided in each module's documentation.
