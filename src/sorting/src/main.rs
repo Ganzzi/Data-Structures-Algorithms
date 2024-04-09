@@ -3,6 +3,7 @@ use std::time::Instant;
 use sorting::{
     bubble_sort::{bubble_sort, bubble_sort2},
     cocktail_sort::cocktail_sort,
+    comb_sort::comb_sort,
 };
 
 fn main() {
@@ -32,6 +33,15 @@ fn main() {
     let start = Instant::now();
     cocktail_sort(&mut test_nums);
     println!(">cocktail sort: {:?}", test_nums);
+    let duration = start.elapsed();
+    println!("-->Time: {:?} ns", duration.as_nanos());
+
+    // COMB SORT
+    println!("\n\n***COMB SORT***");
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    comb_sort(&mut test_nums);
+    println!(">comb sort: {:?}", test_nums);
     let duration = start.elapsed();
     println!("-->Time: {:?} ns", duration.as_nanos());
 }
