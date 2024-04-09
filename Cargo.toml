@@ -5,7 +5,7 @@ members = [
     "src/linked_list", 
     "src/queue", 
     "src/recursion", 
-    "src/searching", 
+    "src/searching", "src/sorting", 
     "src/stack", 
     "src/vec",
 ]
