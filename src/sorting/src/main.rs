@@ -1,47 +1,57 @@
 use std::time::Instant;
 
-use sorting::{
-    bubble_sort::{bubble_sort, bubble_sort2},
-    cocktail_sort::cocktail_sort,
-    comb_sort::comb_sort,
-};
+use sorting::bubble_sort::{bubble_sort, bubble_sort2, cocktail_sort, comb_sort};
 
 fn main() {
-    let nums = [
-        45, 56, 57, 69, 73, 75, 1, 4, 6, 7, 8, 9, 10, 15, 16, 17, 2, 3, 19, 21, 23, 24, 27, 28, 29,
+    let nums: Vec<i32> = vec![
+        2, 4, 7, 8, 23, 19, 16, 14, 13, 12, 10, 20, 18, 17, 15, 11, 9, -1, 5, 6, 1, 3, 21, 40, 22,
+        39, 38, 37, 36, 35, 34, 33, 24, 30, 31, 32, 25, 26, 27, 28, 29, 41, 42, 43, 44, 45, 46, 47,
+        48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 80, 79, 78, 77, 76, 75, 74, 73, 72, 71,
+        70, 61, 62, 63, 64, 65, 66, 67, 68, 69, 95, 94, 93, 92, 91, 90, 85, 82, 83, 84, 81, 86, 87,
+        88, 89,
     ];
 
-    // BUBBLE SORT
-    println!("\n\n***BUBBLE SORT***");
+    println!("{:<15} {:<10} {:>10}", "Algorithm", "Status", "Time (ns)");
+    println!("-----------------------------------");
+
     let mut test_nums = nums.clone();
     let start = Instant::now();
     bubble_sort(&mut test_nums);
-    println!(">bubble sort 1: {:?}", test_nums);
-    let duration = start.elapsed();
-    println!("-->Time: {:?} ns", duration.as_nanos());
+    print_sorting_results("Bubble Sort 1", start.elapsed(), is_sorted(&test_nums));
 
     let mut test_nums = nums.clone();
     let start = Instant::now();
     bubble_sort2(&mut test_nums);
-    println!(">bubble sort 2: {:?}", test_nums);
-    let duration = start.elapsed();
-    println!("-->Time: {:?} ns", duration.as_nanos());
+    print_sorting_results("Bubble Sort 2", start.elapsed(), is_sorted(&test_nums));
 
-    // COCKTAIL SORT
-    println!("\n\n***COCKTAIL SORT***");
     let mut test_nums = nums.clone();
     let start = Instant::now();
     cocktail_sort(&mut test_nums);
-    println!(">cocktail sort: {:?}", test_nums);
-    let duration = start.elapsed();
-    println!("-->Time: {:?} ns", duration.as_nanos());
+    print_sorting_results("Cocktail Sort", start.elapsed(), is_sorted(&test_nums));
 
-    // COMB SORT
-    println!("\n\n***COMB SORT***");
     let mut test_nums = nums.clone();
     let start = Instant::now();
     comb_sort(&mut test_nums);
-    println!(">comb sort: {:?}", test_nums);
-    let duration = start.elapsed();
-    println!("-->Time: {:?} ns", duration.as_nanos());
+    print_sorting_results("Comb Sort", start.elapsed(), is_sorted(&test_nums));
+}
+
+fn print_sorting_results(name: &str, duration: std::time::Duration, sorted: bool) {
+    println!(
+        "{:<15} {:<10} {:>6} ns",
+        name,
+        if sorted { "Sorted" } else { "Not Sorted" },
+        duration.as_nanos()
+    );
+}
+
+fn is_sorted(nums: &[i32]) -> bool {
+    let mut sorted = true;
+
+    for i in 0..nums.len() - 1 {
+        if nums[i] > nums[i + 1] {
+            sorted = false;
+        }
+    }
+
+    sorted
 }
