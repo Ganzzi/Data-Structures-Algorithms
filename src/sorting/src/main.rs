@@ -1,6 +1,6 @@
 use std::time::Instant;
 
-use sorting::bubble_sort::{bubble_sort, bubble_sort2, cocktail_sort, comb_sort};
+use sorting::bubble_sort::{bubble_sort, bubble_sort2, cocktail_sort, comb_sort, simplest_sort};
 
 fn main() {
     let nums: Vec<i32> = vec![
@@ -33,6 +33,11 @@ fn main() {
     let start = Instant::now();
     comb_sort(&mut test_nums);
     print_sorting_results("Comb Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    simplest_sort(&mut test_nums);
+    print_sorting_results("Simplest Sort", start.elapsed(), is_sorted(&test_nums));
 }
 
 fn print_sorting_results(name: &str, duration: std::time::Duration, sorted: bool) {

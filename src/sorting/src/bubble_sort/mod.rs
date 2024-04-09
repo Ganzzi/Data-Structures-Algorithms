@@ -147,3 +147,30 @@ pub fn comb_sort(nums: &mut [i32]) {
         }
     }
 }
+
+/// Sorts a mutable slice of integers using the simplest sort algorithm.
+///
+/// The simplest sort algorithm compares each element of the slice with every other element
+/// and swaps them if they are out of order. This process continues until the entire
+/// slice is sorted.
+///
+/// # Arguments
+///
+/// * `nums` - A mutable reference to a slice of integers to be sorted.
+///
+/// # Examples
+///
+/// ```
+/// let mut nums = [4, 2, 1, 3];
+/// simplest_sort(&mut nums);
+/// assert_eq!(nums, [1, 2, 3, 4]);
+/// ```
+pub fn simplest_sort(nums: &mut [i32]) {
+    for i in 0..nums.len() {
+        for j in 0..nums.len() {
+            if nums[i] < nums[j] {
+                nums.swap(i, j);
+            }
+        }
+    }
+}
