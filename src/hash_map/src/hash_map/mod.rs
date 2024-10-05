@@ -1,170 +1,144 @@
+use std::collections::hash_map::DefaultHasher;
 use std::fmt::Debug;
+use std::hash::{Hash, Hasher};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct HashMap<K, V> {
-    cap: usize,
-    slot: Vec<K>,
-    data: Vec<V>,
+    buckets: Vec<Vec<(K, V)>>,
+    size: usize,
 }
 
 impl<K, V> HashMap<K, V>
 where
-    K: ToString + Default + PartialEq + Clone + Debug,
-    V: Clone + PartialEq + Default,
+    K: Hash + Eq + Clone + Debug,
+    V: Clone + PartialEq,
 {
-    pub fn new(cap: usize) -> Self {
-        let mut slot = Vec::with_capacity(cap);
-        let mut data = Vec::with_capacity(cap);
-        for _ in 0..cap {
-            slot.push(Default::default());
-            data.push(Default::default());
-        }
-
-        HashMap { cap, slot, data }
+    pub fn with_capacity(capacity: usize) -> Self {
+        let buckets = vec![Vec::new(); capacity];
+        HashMap { buckets, size: 0 }
     }
 
-    pub fn insert(&mut self, key: &K, value: &V) {
-        let mut pos = self.hash(&key);
+    pub fn new() -> Self {
+        let initial_capacity = 16;
+        let buckets = vec![Vec::new(); initial_capacity];
+        HashMap { buckets, size: 0 }
+    }
 
-        while self.slot[pos] != Default::default() && self.slot[pos] != *key {
-            pos = self.rehash(pos);
+    pub fn insert(&mut self, key: K, value: V) {
+        if self.size >= self.buckets.len() {
+            self.resize();
+        }
 
-            if pos == self.hash(&key) {
-                panic!("Hash table is full");
+        let bucket_index = self.hash(&key);
+        let bucket = &mut self.buckets[bucket_index];
+
+        for &mut (ref existing_key, ref mut existing_value) in bucket.iter_mut() {
+            if existing_key == &key {
+                *existing_value = value;
+                return;
             }
         }
 
-        self.slot[pos] = key.clone();
-        self.data[pos] = value.clone();
+        bucket.push((key, value));
+        self.size += 1;
     }
 
     pub fn remove(&mut self, key: &K) -> Option<V> {
-        let mut pos = self.hash(key);
+        let bucket_index = self.hash(key);
+        let bucket = &mut self.buckets[bucket_index];
 
-        while self.slot[pos] != Default::default() && self.slot[pos] != *key {
-            pos = self.rehash(pos);
-
-            if pos == self.hash(&key) {
-                return None;
-            }
+        if let Some(pos) = bucket
+            .iter()
+            .position(|(existing_key, _)| existing_key == key)
+        {
+            let (_, value) = bucket.remove(pos);
+            self.size -= 1;
+            return Some(value);
         }
 
-        let removed_value = self.data[pos].clone();
-        self.slot[pos] = Default::default();
-        self.data[pos] = Default::default();
-        Some(removed_value)
+        None
     }
 
     pub fn get(&self, key: &K) -> Option<&V> {
-        let mut pos = self.hash(key);
+        let bucket_index = self.hash(key);
+        let bucket = &self.buckets[bucket_index];
 
-        while self.slot[pos] != *key {
-            pos = self.rehash(pos);
-
-            if pos == self.hash(&key) {
-                return None;
+        for (existing_key, value) in bucket.iter() {
+            if existing_key == key {
+                return Some(value);
             }
         }
 
-        if self.slot[pos] == *key {
-            Some(&self.data[pos])
-        } else {
-            None
-        }
+        None
     }
 
     pub fn get_mut(&mut self, key: &K) -> Option<&mut V> {
-        let mut pos = self.hash(key);
+        let bucket_index = self.hash(key);
+        let bucket = &mut self.buckets[bucket_index];
 
-        while self.slot[pos] != *key {
-            pos = self.rehash(pos);
-
-            if pos == self.hash(&key) {
-                return None;
+        for (existing_key, value) in bucket.iter_mut() {
+            if existing_key == key {
+                return Some(value);
             }
         }
 
-        if self.slot[pos] == *key {
-            Some(&mut self.data[pos])
-        } else {
-            None
-        }
+        None
     }
 
     pub fn contains(&self, key: &K) -> bool {
-        let mut pos = self.hash(key);
-
-        while self.slot[pos] != Default::default() && self.slot[pos] != *key {
-            pos = self.rehash(pos);
-
-            if pos == self.hash(&key) {
-                return false;
-            }
-        }
-
-        self.slot[pos] == *key
+        self.get(key).is_some()
     }
 
     pub fn is_empty(&self) -> bool {
-        self.slot.iter().all(|x| *x == Default::default())
+        self.size == 0
     }
 
     pub fn len(&self) -> usize {
-        self.slot.iter().filter(|&x| *x != Default::default()).count()
+        self.size
     }
 
     pub fn clear(&mut self) {
-        for slot in &mut self.slot {
-            *slot = Default::default();
+        for bucket in &mut self.buckets {
+            bucket.clear();
         }
-        for data in &mut self.data {
-            *data = Default::default();
-        }
+        self.size = 0;
     }
 
     pub fn iter(&self) -> impl Iterator<Item = (&K, &V)> {
-        self.slot
+        self.buckets
             .iter()
-            .zip(&self.data)
-            .filter(|(key, _)| key != &&Default::default())
+            .flat_map(|bucket| bucket.iter())
             .map(|(key, value)| (key, value))
     }
 
-    pub fn iter_mut(&mut self) -> impl Iterator<Item = (&K, &mut V)> {
-        self.slot
-            .iter()
-            .zip(&mut self.data)
-            .filter_map(|(key, value)| {
-                if *key != Default::default() {
-                    Some((key, value))
-                } else {
-                    None
-                }
-            })
-    }
-
-    pub fn index_of(&self, key: &K) -> usize {
-        let mut pos = self.hash(key);
-
-        while self.slot[pos] != Default::default() && self.slot[pos] != *key {
-            pos = self.rehash(pos);
-
-            if pos == self.hash(&key) {
-                panic!("key not found");
-            }
-        }
-        pos
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = (&mut K, &mut V)> {
+        self.buckets
+            .iter_mut()
+            .flat_map(|bucket| bucket.iter_mut())
+            .map(|(key, value)| (key, value))
     }
 
     fn hash(&self, key: &K) -> usize {
-        let mut sum_bytes: u32 = 0;
-        for byte in key.to_string().bytes() {
-            sum_bytes += byte as u32;
-        }
-        sum_bytes as usize % self.cap
+        let mut hasher = DefaultHasher::new();
+        key.hash(&mut hasher);
+        (hasher.finish() as usize) % self.buckets.len()
     }
 
-    fn rehash(&self, pos: usize) -> usize {
-        (pos + 1) % self.cap
+    fn resize(&mut self) {
+        let new_capacity = self.buckets.len() * 2;
+        let mut new_buckets = vec![Vec::new(); new_capacity];
+
+        for bucket in self.buckets.drain(..) {
+            for (key, value) in bucket {
+                let new_bucket_index = {
+                    let mut hasher: DefaultHasher = DefaultHasher::new();
+                    key.hash(&mut hasher);
+                    (hasher.finish() as usize) % new_capacity
+                };
+                new_buckets[new_bucket_index].push((key, value));
+            }
+        }
+
+        self.buckets = new_buckets;
     }
 }
