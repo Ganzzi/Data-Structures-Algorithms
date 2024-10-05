@@ -1,6 +1,10 @@
 use std::time::Instant;
 
-use sorting::bubble_sort::{bubble_sort, bubble_sort2, cocktail_sort, comb_sort, simplest_sort};
+use sorting::{
+    bubble_sort::{bubble_sort, bubble_sort2, cocktail_sort, comb_sort, simplest_sort},
+    insertion_sort::{binary_insertion_sort, insertion_sort},
+    quick_sort::quick_sort,
+};
 
 fn main() {
     let nums: Vec<i32> = vec![
@@ -38,11 +42,31 @@ fn main() {
     let start = Instant::now();
     simplest_sort(&mut test_nums);
     print_sorting_results("Simplest Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    let len = test_nums.len();
+    quick_sort(&mut test_nums, 0, len - 1);
+    print_sorting_results("Quick Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    insertion_sort(&mut test_nums);
+    print_sorting_results("Insertion Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    binary_insertion_sort(&mut test_nums);
+    print_sorting_results(
+        "Binary Insertion Sort",
+        start.elapsed(),
+        is_sorted(&test_nums),
+    );
 }
 
 fn print_sorting_results(name: &str, duration: std::time::Duration, sorted: bool) {
     println!(
-        "{:<15} {:<10} {:>6} ns",
+        "{:<25} {:<10} {:>6} ns",
         name,
         if sorted { "Sorted" } else { "Not Sorted" },
         duration.as_nanos()

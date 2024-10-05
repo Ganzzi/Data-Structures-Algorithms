@@ -80,9 +80,9 @@ fn main() {
 
     // HASH SEARCH
     println!("\n\n***HASH SEARCH***");
-    let mut hash_map = HashMap::new(nums.len());
+    let mut hash_map = HashMap::with_capacity(nums.len());
     for (index, &num) in nums.iter().enumerate() {
-        hash_map.insert(&num, &index);
+        hash_map.insert(num, index);
     }
 
     let start = Instant::now();
