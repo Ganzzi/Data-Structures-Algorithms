@@ -3,6 +3,7 @@ use std::time::Instant;
 use sorting::{
     bubble_sort::{bubble_sort, bubble_sort2, cocktail_sort, comb_sort, simplest_sort},
     insertion_sort::{binary_insertion_sort, insertion_sort},
+    merge_sort::merge_sort,
     quick_sort::quick_sort,
     shell_sort::shell_sort,
 };
@@ -68,6 +69,11 @@ fn main() {
     let start = Instant::now();
     shell_sort(&mut test_nums);
     print_sorting_results("Shell Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    merge_sort(&mut test_nums);
+    print_sorting_results("Merge Sort", start.elapsed(), is_sorted(&test_nums));
 }
 
 fn print_sorting_results(name: &str, duration: std::time::Duration, sorted: bool) {
