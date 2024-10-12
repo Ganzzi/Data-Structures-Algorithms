@@ -5,6 +5,7 @@ use sorting::{
     insertion_sort::{binary_insertion_sort, insertion_sort},
     merge_sort::merge_sort,
     quick_sort::quick_sort,
+    selection_sort::{bidirectional_selection_sort, selection_sort},
     shell_sort::shell_sort,
 };
 
@@ -17,7 +18,7 @@ fn main() {
         88, 89,
     ];
 
-    println!("{:<15} {:<10} {:>10}", "Algorithm", "Status", "Time (ns)");
+    println!("{:<30} {:<10} {:>10}", "Algorithm", "Status", "Time (ns)");
     println!("-----------------------------------");
 
     let mut test_nums = nums.clone();
@@ -74,11 +75,25 @@ fn main() {
     let start = Instant::now();
     merge_sort(&mut test_nums);
     print_sorting_results("Merge Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    selection_sort(&mut test_nums);
+    print_sorting_results("Selection Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    bidirectional_selection_sort(&mut test_nums);
+    print_sorting_results(
+        "Bidirectional Selection Sort",
+        start.elapsed(),
+        is_sorted(&test_nums),
+    );
 }
 
 fn print_sorting_results(name: &str, duration: std::time::Duration, sorted: bool) {
     println!(
-        "{:<25} {:<10} {:>6} ns",
+        "{:<30} {:<10} {:>6} ns",
         name,
         if sorted { "Sorted" } else { "Not Sorted" },
         duration.as_nanos()
