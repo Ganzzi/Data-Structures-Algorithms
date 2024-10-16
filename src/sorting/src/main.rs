@@ -3,6 +3,7 @@ use std::time::Instant;
 use sorting::{
     bubble_sort::{bubble_sort, bubble_sort2, cocktail_sort, comb_sort, simplest_sort},
     bucket_sort::bucket_sort,
+    counting_sort::counting_sort,
     heap_sort::heap_sort,
     insertion_sort::{binary_insertion_sort, insertion_sort},
     merge_sort::merge_sort,
@@ -21,7 +22,7 @@ fn main() {
     ];
 
     println!("{:<30} {:<10} {:>10}", "Algorithm", "Status", "Time (ns)");
-    println!("-----------------------------------");
+    println!("---------------------------------------------------");
 
     let mut test_nums = nums.clone();
     let start = Instant::now();
@@ -101,6 +102,11 @@ fn main() {
     let start = Instant::now();
     bucket_sort(&mut test_nums);
     print_sorting_results("Bucket Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    counting_sort(&mut test_nums);
+    print_sorting_results("Counting Sort", start.elapsed(), is_sorted(&test_nums));
 }
 
 fn print_sorting_results(name: &str, duration: std::time::Duration, sorted: bool) {
