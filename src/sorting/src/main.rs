@@ -2,6 +2,7 @@ use std::time::Instant;
 
 use sorting::{
     bubble_sort::{bubble_sort, bubble_sort2, cocktail_sort, comb_sort, simplest_sort},
+    heap_sort::heap_sort,
     insertion_sort::{binary_insertion_sort, insertion_sort},
     merge_sort::merge_sort,
     quick_sort::quick_sort,
@@ -89,6 +90,11 @@ fn main() {
         start.elapsed(),
         is_sorted(&test_nums),
     );
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    heap_sort(&mut test_nums);
+    print_sorting_results("Heap Sort", start.elapsed(), is_sorted(&test_nums));
 }
 
 fn print_sorting_results(name: &str, duration: std::time::Duration, sorted: bool) {
