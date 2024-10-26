@@ -8,6 +8,7 @@ use sorting::{
     insertion_sort::{binary_insertion_sort, insertion_sort},
     merge_sort::merge_sort,
     quick_sort::quick_sort,
+    radix_sort::radix_sort,
     selection_sort::{bidirectional_selection_sort, selection_sort},
     shell_sort::shell_sort,
 };
@@ -107,6 +108,11 @@ fn main() {
     let start = Instant::now();
     counting_sort(&mut test_nums);
     print_sorting_results("Counting Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    radix_sort(&mut test_nums);
+    print_sorting_results("Radix Sort", start.elapsed(), is_sorted(&test_nums));
 }
 
 fn print_sorting_results(name: &str, duration: std::time::Duration, sorted: bool) {
