@@ -11,19 +11,14 @@ use sorting::{
     radix_sort::radix_sort,
     selection_sort::{bidirectional_selection_sort, selection_sort},
     shell_sort::shell_sort,
+    tim_sort::{balanced_tim_sort::balanced_tim_sort, tim_sort},
 };
 
 fn main() {
-    let nums: Vec<i32> = vec![
-        2, 4, 7, 8, 23, 19, 16, 14, 13, 12, 10, 20, 18, 17, 15, 11, 9, -1, 5, 6, 1, 3, 21, 40, 22,
-        39, 38, 37, 36, 35, 34, 33, 24, 30, 31, 32, 25, 26, 27, 28, 29, 41, 42, 43, 44, 45, 46, 47,
-        48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 80, 79, 78, 77, 76, 75, 74, 73, 72, 71,
-        70, 61, 62, 63, 64, 65, 66, 67, 68, 69, 95, 94, 93, 92, 91, 90, 85, 82, 83, 84, 81, 86, 87,
-        88, 89,
-    ];
+    let nums: Vec<i32> = generate_random_data(1000);
 
-    println!("{:<30} {:<10} {:>10}", "Algorithm", "Status", "Time (ns)");
-    println!("---------------------------------------------------");
+    println!("{:<30} {:<10} {:>13}", "Algorithm", "Status", "Time (ns)");
+    println!("-------------------------------------------------------");
 
     let mut test_nums = nums.clone();
     let start = Instant::now();
@@ -113,11 +108,27 @@ fn main() {
     let start = Instant::now();
     radix_sort(&mut test_nums);
     print_sorting_results("Radix Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    tim_sort(&mut test_nums);
+    print_sorting_results("Tim Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    balanced_tim_sort(&mut test_nums);
+    print_sorting_results("Balanced Tim Sort", start.elapsed(), is_sorted(&test_nums));
+}
+
+fn generate_random_data(size: usize) -> Vec<i32> {
+    use rand::Rng;
+    let mut rng = rand::thread_rng();
+    (0..size).map(|_| rng.gen_range(0..1_000_000)).collect()
 }
 
 fn print_sorting_results(name: &str, duration: std::time::Duration, sorted: bool) {
     println!(
-        "{:<30} {:<10} {:>6} ns",
+        "{:<30} {:<10} {:>10} ns",
         name,
         if sorted { "Sorted" } else { "Not Sorted" },
         duration.as_nanos()
