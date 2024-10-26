@@ -1,32 +1,41 @@
 use std::time::Instant;
 
 use sorting::{
-    bubble_sort::{bubble_sort, bubble_sort2, cocktail_sort, comb_sort, simplest_sort},
-    insertion_sort::{binary_insertion_sort, insertion_sort},
+    bubble_sort::{
+        bubble_sort, cocktail_sort::cocktail_sort, comb_sort::comb_sort, naive_sort::naive_sort,
+        optimized_bubble_sort::optimized_bubble_sort,
+    },
+    bucket_sort::bucket_sort,
+    counting_sort::counting_sort,
+    heap_sort::heap_sort,
+    insertion_sort::{binary_insertion_sort::binary_insertion_sort, insertion_sort},
+    merge_sort::merge_sort,
     quick_sort::quick_sort,
+    radix_sort::{radix_sort, radix_sort_by_sign::radix_sort_by_sign},
+    selection_sort::{bidirectional_selection_sort::bidirectional_selection_sort, selection_sort},
+    shell_sort::shell_sort,
+    tim_sort::{balanced_tim_sort::balanced_tim_sort, tim_sort},
 };
 
 fn main() {
-    let nums: Vec<i32> = vec![
-        2, 4, 7, 8, 23, 19, 16, 14, 13, 12, 10, 20, 18, 17, 15, 11, 9, -1, 5, 6, 1, 3, 21, 40, 22,
-        39, 38, 37, 36, 35, 34, 33, 24, 30, 31, 32, 25, 26, 27, 28, 29, 41, 42, 43, 44, 45, 46, 47,
-        48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 80, 79, 78, 77, 76, 75, 74, 73, 72, 71,
-        70, 61, 62, 63, 64, 65, 66, 67, 68, 69, 95, 94, 93, 92, 91, 90, 85, 82, 83, 84, 81, 86, 87,
-        88, 89,
-    ];
+    let nums: Vec<i32> = generate_random_data(1000);
 
-    println!("{:<15} {:<10} {:>10}", "Algorithm", "Status", "Time (ns)");
-    println!("-----------------------------------");
+    println!("{:<30} {:<10} {:>15}", "Algorithm", "Status", "Time (ns)");
+    println!("{:-<57}", "");
 
     let mut test_nums = nums.clone();
     let start = Instant::now();
     bubble_sort(&mut test_nums);
-    print_sorting_results("Bubble Sort 1", start.elapsed(), is_sorted(&test_nums));
+    print_sorting_results("Bubble Sort", start.elapsed(), is_sorted(&test_nums));
 
     let mut test_nums = nums.clone();
     let start = Instant::now();
-    bubble_sort2(&mut test_nums);
-    print_sorting_results("Bubble Sort 2", start.elapsed(), is_sorted(&test_nums));
+    optimized_bubble_sort(&mut test_nums);
+    print_sorting_results(
+        "Optimized Bubble Sort",
+        start.elapsed(),
+        is_sorted(&test_nums),
+    );
 
     let mut test_nums = nums.clone();
     let start = Instant::now();
@@ -40,8 +49,8 @@ fn main() {
 
     let mut test_nums = nums.clone();
     let start = Instant::now();
-    simplest_sort(&mut test_nums);
-    print_sorting_results("Simplest Sort", start.elapsed(), is_sorted(&test_nums));
+    naive_sort(&mut test_nums);
+    print_sorting_results("Naive Sort", start.elapsed(), is_sorted(&test_nums));
 
     let mut test_nums = nums.clone();
     let start = Instant::now();
@@ -62,11 +71,76 @@ fn main() {
         start.elapsed(),
         is_sorted(&test_nums),
     );
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    shell_sort(&mut test_nums);
+    print_sorting_results("Shell Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    merge_sort(&mut test_nums);
+    print_sorting_results("Merge Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    selection_sort(&mut test_nums);
+    print_sorting_results("Selection Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    bidirectional_selection_sort(&mut test_nums);
+    print_sorting_results(
+        "Bidirectional Selection Sort",
+        start.elapsed(),
+        is_sorted(&test_nums),
+    );
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    heap_sort(&mut test_nums);
+    print_sorting_results("Heap Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    bucket_sort(&mut test_nums);
+    print_sorting_results("Bucket Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    counting_sort(&mut test_nums);
+    print_sorting_results("Counting Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    radix_sort(&mut test_nums);
+    print_sorting_results("Radix Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    radix_sort_by_sign(&mut test_nums);
+    print_sorting_results("Radix Sort by Sign", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    tim_sort(&mut test_nums);
+    print_sorting_results("Tim Sort", start.elapsed(), is_sorted(&test_nums));
+
+    let mut test_nums = nums.clone();
+    let start = Instant::now();
+    balanced_tim_sort(&mut test_nums);
+    print_sorting_results("Balanced Tim Sort", start.elapsed(), is_sorted(&test_nums));
+}
+
+fn generate_random_data(size: usize) -> Vec<i32> {
+    use rand::Rng;
+    let mut rng = rand::thread_rng();
+    (0..size).map(|_| rng.gen_range(0..1_000_000)).collect()
 }
 
 fn print_sorting_results(name: &str, duration: std::time::Duration, sorted: bool) {
     println!(
-        "{:<25} {:<10} {:>6} ns",
+        "{:<30} {:<10} {:>12} ns",
         name,
         if sorted { "Sorted" } else { "Not Sorted" },
         duration.as_nanos()

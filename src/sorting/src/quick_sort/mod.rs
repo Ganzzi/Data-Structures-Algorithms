@@ -1,4 +1,4 @@
-/// Quick sort
+/// # Quick sort
 ///
 /// Quick sort is a sorting algorithm that uses the divide and conquer strategy to sort an array.
 ///
@@ -11,11 +11,11 @@
 /// # Examples
 ///
 /// ```
-/// use crate::sorting::quick_sort::quick_sort;
 ///
 /// let mut nums = vec![4, 2, 1, 3];
 /// let len = nums.len();
-/// quick_sort(&mut nums, 0, len - 1);
+///
+/// crate::sorting::quick_sort::quick_sort(&mut nums, 0, len - 1);
 ///
 /// assert_eq!(nums, vec![1, 2, 3, 4]);
 /// ```
