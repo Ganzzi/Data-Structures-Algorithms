@@ -128,7 +128,9 @@ pub fn cocktail_sort(nums: &mut [i32]) {
 ///
 /// ```
 /// let mut nums = [4, 2, 3, 1];
-/// comb_sort(&mut nums);
+///
+/// crate::sorting::bubble_sort::comb_sort(&mut nums);
+///
 /// assert_eq!(nums, [1, 2, 3, 4]);
 /// ```
 pub fn comb_sort(nums: &mut [i32]) {
@@ -136,13 +138,17 @@ pub fn comb_sort(nums: &mut [i32]) {
 
     let len = nums.len();
     let mut gap = len;
+    let mut sorted = false;
 
-    while gap > 1 {
-        gap = (gap as f32 / SHRINK_FACTOR) as usize;
+    while gap > 1 || !sorted {
+        gap = (gap as f32 / SHRINK_FACTOR).max(1.0) as usize;
+
+        sorted = true;
 
         for i in gap..len {
             if nums[i - gap] > nums[i] {
                 nums.swap(i - gap, i);
+                sorted = false;
             }
         }
     }
