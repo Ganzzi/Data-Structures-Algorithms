@@ -10,11 +10,9 @@
 /// # Example
 ///
 /// ```
-/// use crate::sorting::merge_sort::merge_sort;
-///
 /// let mut nums = vec![4, 65, 2, -31, 0, 99, 2, 83, 782, 1];
 ///
-/// merge_sort(&mut nums);
+/// crate::sorting::merge_sort::merge_sort(&mut nums);
 ///
 /// assert_eq!(nums, vec![-31, 0, 1, 2, 2, 4, 65, 83, 99, 782]);
 /// ```

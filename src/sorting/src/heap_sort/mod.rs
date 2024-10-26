@@ -11,7 +11,7 @@ macro_rules! right_child {
 }
 
 ///
-/// Heap Sort
+/// # Heap Sort
 ///
 /// Heap sort is a comparison-based sorting algorithm that uses a binary heap data structure to sort elements.
 ///

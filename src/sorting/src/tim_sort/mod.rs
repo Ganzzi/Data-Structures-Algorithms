@@ -1,4 +1,4 @@
-use crate::insertion_sort::binary_insertion_sort;
+use crate::insertion_sort::binary_insertion_sort::binary_insertion_sort;
 
 pub mod balanced_tim_sort;
 

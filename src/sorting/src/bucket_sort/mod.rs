@@ -15,7 +15,7 @@ const MEDIUM_SIZE_BUCKET_FACTOR: f32 = 0.25;
 const LARGE_SIZE_BUCKET_FACTOR: f32 = 0.42;
 
 ///
-/// Bucket Sort
+/// # Bucket Sort
 ///
 /// Bucket sort is a hybrid sorting algorithm that distributes elements into a number of buckets, based on a hashing function that maps elements to their respective buckets. The goal is to reduce the sorting complexity by partitioning the input data into smaller groups (buckets) and sorting each bucket individually.
 ///

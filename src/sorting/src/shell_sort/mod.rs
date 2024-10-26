@@ -1,5 +1,5 @@
 ///
-/// Shell Sort
+/// # Shell Sort
 ///
 /// Shell sort is a generalization of insertion sort that allows the exchange of items that are far apart.
 ///

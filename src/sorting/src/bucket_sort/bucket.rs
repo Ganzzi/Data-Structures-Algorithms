@@ -4,6 +4,7 @@ pub struct Bucket {
 }
 
 impl Bucket {
+    /// Creates a new `Bucket` with the specified hasher.
     pub fn new(hasher: i32) -> Self {
         Bucket {
             hasher,
@@ -11,6 +12,7 @@ impl Bucket {
         }
     }
 
+    /// Creates a new `Bucket` with the specified hasher and value.
     pub fn with_value(hasher: i32, value: i32) -> Self {
         Bucket {
             hasher,
@@ -18,6 +20,7 @@ impl Bucket {
         }
     }
 
+    /// Adds a value to the bucket.
     pub fn add(&mut self, value: i32) {
         self.values.push(value);
     }

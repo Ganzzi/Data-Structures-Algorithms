@@ -1,4 +1,4 @@
-use crate::insertion_sort::binary_insertion_sort;
+use crate::insertion_sort::binary_insertion_sort::binary_insertion_sort;
 
 /// # Balanced Tim Sort
 ///
@@ -11,8 +11,6 @@ use crate::insertion_sort::binary_insertion_sort;
 /// # Example
 ///
 /// ```
-/// use crate::sorting::tim_sort::balanced_tim_sort;
-///
 /// let mut nums = vec![
 ///      2, 4, 7, 8, 23, 19, 16, 14, 13, 12, 10, 20, 18, 17, 15, 11, 9, -1, 5, 6, 1, 3, 21, 40, 22,
 ///      39, 38, 37, 36, 35, 34, 33, 24, 30, 31, 32, 25, 26, 27, 28, 29, 41, 42, 43, 44, 45, 46, 47,
@@ -21,7 +19,7 @@ use crate::insertion_sort::binary_insertion_sort;
 ///      88, 89,
 /// ];
 ///
-/// balanced_tim_sort(&mut nums);
+/// crate::sorting::tim_sort::balanced_tim_sort::balanced_tim_sort(&mut nums);
 ///
 /// assert_eq!( nums, [
 ///     -1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
