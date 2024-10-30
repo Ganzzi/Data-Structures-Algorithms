@@ -34,26 +34,27 @@ This Rust project aims to implement various data structures and algorithms to he
    - Exponential Search: A hybrid searching algorithm that combines binary search and sequential search. It works by finding a range where the target element may be present using exponential increments, then performing binary search within that range. It's useful for unbounded or infinite collections.
    - Interpolation Search: An improved version of binary search that works on uniformly distributed sorted collections. It estimates the position of the target element by extrapolating from the values of the endpoints of the collection and performs binary search accordingly. It's particularly effective for large collections with evenly distributed values.
    - Hash Search: Utilizes a hash function to map keys to indices in a data structure, typically a hash table or hashmap. It provides constant-time average case complexity for insertion, deletion, and retrieval operations, making it highly efficient for large collections when implemented properly. However, it relies on a good hash function and may have collisions.
-   8. Sorting:
-      - Bubble Sort: A simple comparison-based sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order.
-      - Optimized Bubble Sort: An improved version of bubble sort that stops the algorithm if the list is already sorted.
-      - Cocktail Sort: Also known as bidirectional bubble sort or shaker sort, it is a variation of the bubble sort algorithm that sorts in both directions, from the beginning to the end and from the end to the beginning.
-      - Comb Sort: A relatively simple comparison-based sorting algorithm that improves upon bubble sort by eliminating small values at the end of the list more efficiently.
-      - Naive Sort: A basic sorting algorithm that repeatedly finds the minimum element from the unsorted part and puts it at the beginning. It compares each element with every other element in the list and swaps them if they are in the wrong order. This process is repeated until the list is fully sorted. Due to its inefficiency, it is not suitable for large lists.
-      - Quick Sort: A divide-and-conquer sorting algorithm that selects a pivot element and partitions the array around the pivot.
-      - Insertion Sort: A simple comparison-based sorting algorithm that builds the final sorted array one item at a time.
-      - Binary Insertion Sort: A variation of insertion sort that uses binary search to find the correct position to insert the current element.
-      - Shell Sort: A comparison-based sorting algorithm that generalizes insertion sort to allow the exchange of items that are far apart.
-      - Merge Sort: A divide-and-conquer sorting algorithm that divides the list into halves, recursively sorts them, and then merges the sorted halves.
-      - Selection Sort: A comparison-based sorting algorithm that repeatedly selects the minimum element from the unsorted part and swaps it with the first unsorted element.
-      - Bidirectional Selection Sort: A variation of selection sort that sorts in both directions, from the beginning to the end and from the end to the beginning.
-      - Heap Sort: A comparison-based sorting algorithm that uses a binary heap data structure to sort elements.
-      - Bucket Sort: A distribution-based sorting algorithm that distributes elements into buckets and then sorts each bucket individually.
-      - Counting Sort: A non-comparison-based sorting algorithm that counts the occurrences of each element and uses this information to place elements in the correct position.
-      - Radix Sort: A non-comparison-based sorting algorithm that sorts numbers by processing individual digits.
-      - Radix Sort by Sign: A variation of radix sort that handles both positive and negative numbers.
-      - Tim Sort: A hybrid sorting algorithm derived from merge sort and insertion sort, designed to perform well on many kinds of real-world data.
-      - Balanced Tim Sort: A variation of Tim sort that balances the merge operations to improve performance.
+   
+8. Sorting:
+   - Bubble Sort: A simple comparison-based sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order.
+   - Optimized Bubble Sort: An improved version of bubble sort that stops the algorithm if the list is already sorted.
+   - Cocktail Sort: Also known as bidirectional bubble sort or shaker sort, it is a variation of the bubble sort algorithm that sorts in both directions, from the beginning to the end and from the end to the beginning.
+   - Comb Sort: A relatively simple comparison-based sorting algorithm that improves upon bubble sort by eliminating small values at the end of the list more efficiently.
+   - Naive Sort: A basic sorting algorithm that repeatedly finds the minimum element from the unsorted part and puts it at the beginning. It compares each element with every other element in the list and swaps them if they are in the wrong order. This process is repeated until the list is fully sorted. Due to its inefficiency, it is not suitable for large lists.
+   - Quick Sort: A divide-and-conquer sorting algorithm that selects a pivot element and partitions the array around the pivot.
+   - Insertion Sort: A simple comparison-based sorting algorithm that builds the final sorted array one item at a time.
+   - Binary Insertion Sort: A variation of insertion sort that uses binary search to find the correct position to insert the current element.
+   - Shell Sort: A comparison-based sorting algorithm that generalizes insertion sort to allow the exchange of items that are far apart.
+   - Merge Sort: A divide-and-conquer sorting algorithm that divides the list into halves, recursively sorts them, and then merges the sorted halves.
+   - Selection Sort: A comparison-based sorting algorithm that repeatedly selects the minimum element from the unsorted part and swaps it with the first unsorted element.
+   - Bidirectional Selection Sort: A variation of selection sort that sorts in both directions, from the beginning to the end and from the end to the beginning.
+   - Heap Sort: A comparison-based sorting algorithm that uses a binary heap data structure to sort elements.
+   - Bucket Sort: A distribution-based sorting algorithm that distributes elements into buckets and then sorts each bucket individually.
+   - Counting Sort: A non-comparison-based sorting algorithm that counts the occurrences of each element and uses this information to place elements in the correct position.
+   - Radix Sort: A non-comparison-based sorting algorithm that sorts numbers by processing individual digits.
+   - Radix Sort by Sign: A variation of radix sort that handles both positive and negative numbers.
+   - Tim Sort: A hybrid sorting algorithm derived from merge sort and insertion sort, designed to perform well on many kinds of real-world data.
+   - Balanced Tim Sort: A variation of Tim sort that balances the merge operations to improve performance.
 
 ## Usage
 

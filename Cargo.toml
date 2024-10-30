@@ -6,6 +6,6 @@ members = [
     "src/queue", 
     "src/recursion", 
     "src/searching", "src/sorting", 
-    "src/stack", 
+    "src/stack", "src/tree", 
     "src/vec",
 ]
