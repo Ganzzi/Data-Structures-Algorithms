@@ -146,44 +146,44 @@ impl<T: Clone + Ord + Debug> BinaryTree<T> {
         }
     }
 
-    pub fn pre_order(&self) {
-        print!(" {:?} ", self.key);
+    pub fn pre_order(&self, f: &mut dyn FnMut(&T)) {
+        f(&self.key);
         if let Some(ref left_node) = self.left {
-            left_node.pre_order();
+            left_node.pre_order(f);
         }
         if let Some(ref right_node) = self.right {
-            right_node.pre_order();
+            right_node.pre_order(f);
         }
     }
 
-    pub fn post_order(&self) {
+    pub fn post_order(&self, f: &mut dyn FnMut(&T)) {
         if let Some(ref left_node) = self.left {
-            left_node.post_order();
+            left_node.post_order(f);
         }
         if let Some(ref right_node) = self.right {
-            right_node.post_order();
+            right_node.post_order(f);
         }
-        print!(" {:?} ", self.key);
+        f(&self.key);
     }
 
-    pub fn in_order(&self) {
+    pub fn in_order(&self, f: &mut dyn FnMut(&T)) {
         if let Some(ref left_node) = self.left {
-            left_node.in_order();
+            left_node.in_order(f);
         }
-        print!(" {:?} ", self.key);
+        f(&self.key);
         if let Some(ref right_node) = self.right {
-            right_node.in_order();
+            right_node.in_order(f);
         }
     }
 
-    pub fn level_order(&self) {
+    pub fn level_order(&self, f: &mut dyn FnMut(&T)) {
         let mut queue = Queue::new(self.size());
         let _ = queue.enqueue(Box::new(self.clone()));
 
         while !queue.is_empty() {
             let node = queue.dequeue().unwrap();
             let node = *node;
-            print!(" {:?} ", node.key);
+            f(node.get_key());
 
             if let Some(left) = node.left {
                 let _ = queue.enqueue(left);
