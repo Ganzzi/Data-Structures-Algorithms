@@ -8,4 +8,5 @@ members = [
     "src/searching", "src/sorting", 
     "src/stack", "src/tree", 
     "src/vec",
+    "src/graph"
 ]
