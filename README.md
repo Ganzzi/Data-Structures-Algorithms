@@ -56,6 +56,12 @@ This Rust project aims to implement various data structures and algorithms to he
    - Tim Sort: A hybrid sorting algorithm derived from merge sort and insertion sort, designed to perform well on many kinds of real-world data.
    - Balanced Tim Sort: A variation of Tim sort that balances the merge operations to improve performance.
 
+9. Tree
+   - Binary Tree: A Binary Tree is tree data structure in which each node has two children, referred to as the left child and the right child. left child's key is less than and right child's key is greater that the node's key. which is efficient for searching and insertion.
+   - Binary Search Tree: Binary Search Tree is a binary tree with the additional property that for each node, which stores data using key-value pairs, similar to HashMap.
+   - Binary Heap: A Binary Heap is essentially a binary tree that allows queuing and dequeuing, make it ideal for efficient scheduling system. It stores data in a linear data structure. In this implementation, min-heap is choosen to store data with the smallest is at the top.
+   - AVL - Balanced Binary Search Tree: An AVL Tree is a self-balancing binary search tree where the balance factor (the difference in heights between the left and right subtree) is at most once. It automatically rebalances during insertion.
+
 ## Usage
 
 To use these functionalities, simply import the respective modules into your Rust code and utilize the provided functions. Example usage is provided in each module's documentation.
