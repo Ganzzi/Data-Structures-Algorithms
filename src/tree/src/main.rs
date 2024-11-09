@@ -1,5 +1,6 @@
 use tree::{
-    binary_heap::BinaryHeap, binary_search_tree::BinarySearchTree, binary_tree::BinaryTree,
+    avl_tree::AVLTree, binary_heap::BinaryHeap, binary_search_tree::BinarySearchTree,
+    binary_tree::BinaryTree,
 };
 
 fn main() {
@@ -8,6 +9,8 @@ fn main() {
     test_binary_heap();
 
     test_binary_search_tree();
+
+    test_avl_tree();
 }
 
 fn test_binary_tree() {
@@ -111,4 +114,47 @@ fn test_binary_search_tree() {
 
     println!("Level-order traversal:");
     bst.level_order(&mut |key, value| println!("Key: {}, Value: {}", key, value));
+}
+
+fn test_avl_tree() {
+    println!("\n\n***AVL TREE DATA TYPE***");
+
+    let mut avl_tree = AVLTree::new();
+
+    avl_tree.insert(10);
+    avl_tree.insert(20);
+    avl_tree.insert(5);
+    avl_tree.insert(6);
+    avl_tree.insert(15);
+
+    println!("Tree is empty: {}", avl_tree.is_empty());
+    println!("Tree size: {}", avl_tree.size());
+    println!("Leaf size: {}", avl_tree.leaf_size());
+    println!("Non-leaf size: {}", avl_tree.non_leaf_size());
+    println!("Tree depth: {}", avl_tree.depth());
+    println!("Tree is balanced: {}", avl_tree.is_balanced());
+
+    println!("Contains 10: {}", avl_tree.contains(&10));
+    println!("Contains 15: {}", avl_tree.contains(&15));
+    println!("Contains 100: {}", avl_tree.contains(&100));
+
+    if let Some(min) = avl_tree.min() {
+        println!("Min key: {}", min);
+    }
+
+    if let Some(max) = avl_tree.max() {
+        println!("Max key: {}", max);
+    }
+
+    println!("Pre-order traversal:");
+    avl_tree.pre_order(&mut |key| println!("Key: {}", key));
+
+    println!("In-order traversal:");
+    avl_tree.in_order(&mut |key| println!("Key: {}", key));
+
+    println!("Post-order traversal:");
+    avl_tree.post_order(&mut |key| println!("Key: {}", key));
+
+    println!("Level-order traversal:");
+    avl_tree.level_order(&mut |key| println!("Key: {}", key));
 }
