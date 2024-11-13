@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 hash_map = { path = "../hash_map"}
+queue = { path = "../queue"}

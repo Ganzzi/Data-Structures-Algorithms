@@ -10,8 +10,8 @@ pub mod vertex;
 #[derive(Debug)]
 pub struct Graph<T, U>
 where
-    T: Default + PartialEq + Clone + Debug + Display + Eq + Hash,
-    Vertex<T, U>: Default + PartialEq,
+    T: PartialEq + Clone + Debug + Display + Eq + Hash,
+    Vertex<T, U>: PartialEq,
     U: Clone,
 {
     vertices_count: usize,
@@ -21,8 +21,8 @@ where
 
 impl<T, U> Graph<T, U>
 where
-    T: Default + PartialEq + Clone + Debug + Display + Eq + Hash,
-    Vertex<T, U>: Default + PartialEq,
+    T: PartialEq + Clone + Debug + Display + Eq + Hash,
+    Vertex<T, U>: PartialEq,
     U: Clone,
 {
     pub fn new() -> Self {
@@ -60,6 +60,10 @@ where
         self.vertices.get(key).cloned()
     }
 
+    pub fn get_vertex_mut(&mut self, key: &T) -> Option<&mut Vertex<T, U>> {
+        self.vertices.get_mut(key)
+    }
+
     pub fn get_vertex_keys(&self) -> Vec<T> {
         self.vertices.iter().map(|(k, _)| k.clone()).collect()
     }
@@ -68,12 +72,12 @@ where
         if let Some(vertex) = self.vertices.remove(key) {
             self.vertices_count -= 1;
 
-            self.edges_count -= vertex.get_neibors().len();
+            self.edges_count -= vertex.get_neighbors().len();
 
             for vtx_key in self.get_vertex_keys() {
                 if let Some(vtx) = self.vertices.get_mut(&vtx_key) {
                     if vtx.is_adjacent(key) {
-                        if let Some(_) = vtx.remove_neibor(key) {
+                        if let Some(_) = vtx.remove_neighbor(key) {
                             self.edges_count -= 1;
                         }
                     }
@@ -100,7 +104,7 @@ where
         self.vertices
             .get_mut(from)
             .unwrap()
-            .add_neibor(to.clone(), u);
+            .add_neighbor(to.clone(), u);
     }
 
     pub fn is_adjacent(&self, from: &T, to: &T) -> bool {

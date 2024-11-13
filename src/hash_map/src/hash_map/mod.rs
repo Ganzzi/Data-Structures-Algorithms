@@ -14,7 +14,7 @@ where
     V: Clone + PartialEq,
 {
     pub fn with_capacity(capacity: usize) -> Self {
-        let buckets = vec![Vec::new(); capacity];
+        let buckets = vec![Vec::new(); capacity + 1];
         HashMap { buckets, size: 0 }
     }
 

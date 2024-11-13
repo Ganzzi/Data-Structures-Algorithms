@@ -34,6 +34,7 @@ name = "graph"
 version = "0.1.0"
 dependencies = [
  "hash_map",
+ "queue",
 ]
 
 [[package]]

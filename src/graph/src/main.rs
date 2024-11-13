@@ -1,7 +1,9 @@
-use graph::graph::Graph;
+use graph::{graph::Graph, word_ladder_puzzle::word_ladder_puzzle};
 
 fn main() {
     test_graph();
+
+    test_word_ladder_puzzle_find_shortest_distance_with_bfs();
 }
 
 fn test_graph() {
@@ -37,5 +39,20 @@ fn test_graph() {
         "B",
         "D",
         graph.is_adjacent(&"B", &"D")
+    );
+}
+
+fn test_word_ladder_puzzle_find_shortest_distance_with_bfs() {
+    println!("\n\n***WORD LADDER PUZZLE***");
+
+    let start = "hit";
+    let end = "cog";
+    let words = vec!["hit", "hot", "dot", "dog", "lot", "log", "cog"];
+
+    let distance = word_ladder_puzzle(words, start, end);
+    println!("Path: {:?}", distance.1);
+    println!(
+        "Shortest distance from {} to {} is: {}",
+        start, end, distance.0
     );
 }
