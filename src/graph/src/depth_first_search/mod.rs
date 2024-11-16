@@ -1,14 +1,15 @@
-use hash_map::hash_map::HashMap;
-use queue::queue::Queue;
 use std::fmt::{Debug, Display};
 use std::hash::Hash;
 use std::ops::Add;
 
 use crate::graph::{vertex::Vertex, Graph};
+use hash_map::hash_map::HashMap;
+use stack::stack::Stack;
+use vec::vec::LinkedVec;
 
-/// # Breadth-first search
+/// # Depth First Search
 ///
-/// Breadth-first search algorithm to find the shortest path between two vertices in a graph. The search is performed by traversing the graph level by level, starting from the initial vertex. The algorithm uses a queue to keep track of the vertices to visit next.
+/// Depth-first search algorithm to find the shortest path between two vertices in a graph. The search is performed by traversing the graph depth by depth, starting from the initial vertex. The algorithm uses a stack to keep track of the vertices to visit next.
 ///
 /// # Arguments
 ///
@@ -23,7 +24,7 @@ use crate::graph::{vertex::Vertex, Graph};
 /// # Example
 ///
 /// ```
-/// use crate::graph::{graph::Graph, breadth_first_search::breadth_first_search};
+/// use crate::graph::{graph::Graph, depth_first_search::depth_first_search};
 ///
 /// let mut graph = Graph::new();
 ///
@@ -33,14 +34,14 @@ use crate::graph::{vertex::Vertex, Graph};
 /// let start_vertex = graph.get_vertex(&"A").unwrap().clone();
 /// let end_vertex = graph.get_vertex(&"C").unwrap().clone();
 ///
-/// let result = breadth_first_search(&mut graph, start_vertex, end_vertex);
+/// let result = depth_first_search(&mut graph, start_vertex, end_vertex);
 ///
 /// println!("Path: {:?}", result.1);
 /// println!("Total distance: {}", result.0);
-///
+///     
 /// assert_eq!(result.0, 2);
 /// ```
-pub fn breadth_first_search<
+pub fn depth_first_search<
     T: Clone + Debug + Display + Eq + Hash,
     U: Debug + Default + Clone + PartialEq + Add<Output = U>,
 >(
@@ -56,17 +57,19 @@ pub fn breadth_first_search<
     }
 
     let mut predecessors: HashMap<T, Option<T>> = HashMap::with_capacity(graph.vertices_count());
-    let mut distances: HashMap<T, U> = HashMap::with_capacity(graph.vertices_count());
+    let mut distances = HashMap::with_capacity(graph.vertices_count());
     for key in graph.get_vertex_keys() {
         distances.insert(key.clone(), U::default());
         predecessors.insert(key.clone(), None);
     }
 
-    let mut vertex_queue: Queue<Vertex<T, U>> = Queue::new(graph.vertices_count());
-    let _ = vertex_queue.enqueue(start.clone());
+    let mut stack = Stack::new();
+    stack.push(start.clone());
 
-    while !vertex_queue.is_empty() {
-        let vertex = vertex_queue.dequeue().unwrap();
+    while !stack.is_empty() {
+        let vertex = stack.pop().unwrap();
+
+        let mut temp = LinkedVec::new();
 
         for neighbor in vertex.get_neighbors() {
             let vertex_neighbor = graph.get_vertex_mut(&neighbor.0).unwrap();
@@ -75,6 +78,7 @@ pub fn breadth_first_search<
                 continue;
             } else if vertex_neighbor.get_key() == end.get_key() {
                 let mut path = vec![vertex_neighbor.get_key().clone()];
+
                 let mut current_vertex = Some(vertex.get_key().clone());
                 while let Some(key) = current_vertex {
                     path.push(key.clone());
@@ -82,15 +86,14 @@ pub fn breadth_first_search<
                 }
                 path.reverse();
 
-                return (
-                    distances
-                        .get(vertex.get_key())
-                        .unwrap()
-                        .clone()
-                        .add(neighbor.1.clone()),
-                    path,
-                );
-            } else if distances.get(vertex_neighbor.get_key()).unwrap() == &U::default() {
+                let total_distance = distances
+                    .get(vertex.get_key())
+                    .unwrap()
+                    .clone()
+                    .add(neighbor.1.clone());
+
+                return (total_distance, path);
+            } else if distances.get(&neighbor.0).unwrap() == &U::default() {
                 let neighbor_distance = distances
                     .get(vertex.get_key())
                     .unwrap()
@@ -102,8 +105,11 @@ pub fn breadth_first_search<
                     Some(vertex.get_key().clone()),
                 );
 
-                let _ = vertex_queue.enqueue(vertex_neighbor.clone());
+                temp.push(vertex_neighbor.clone());
             }
+        }
+        while !temp.is_empty() {
+            stack.push(temp.pop().unwrap());
         }
     }
 

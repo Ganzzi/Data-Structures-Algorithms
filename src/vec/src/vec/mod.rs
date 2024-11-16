@@ -1,49 +1,52 @@
-use std::{fmt::Debug, ops::DerefMut};
+use std::fmt::Debug;
 
 use linked_list::linked_list::{Next, Node};
 
-/// Represents a singly linked list.
+/// Represents a singly linked vector.
 #[derive(Debug)]
 pub struct LinkedVec<T> {
-    /// The size of the linked list.
+    /// The size of the linked vector.
     size: usize,
-    /// Pointer to the head node of the linked list.
+    /// Pointer to the head node of the linked vector.
     head: Next<T>,
 }
 
-impl<T: Debug + Copy> LinkedVec<T> {
-    /// Creates a new empty linked list with the specified size.
+impl<T: Debug + Clone> LinkedVec<T> {
+    /// Creates a new empty linked vector with the specified size.
     ///
     /// # Returns
     ///
-    /// A new empty linked list with the specified size.
+    /// A new empty linked vector with the specified size.
     ///
     /// # Examples
     ///
     /// ```
     /// use vec::LinkedVec;
     ///
-    /// let list: LinkedVec<i32> = LinkedVec::new();
-    /// assert_eq!(list.size(), 0);
+    /// let vec: LinkedVec<i32> = LinkedVec::new();
+    /// assert_eq!(vec.size(), 0);
     /// ```
     pub fn new() -> Self {
-        LinkedVec { size: 0, head: None }
+        LinkedVec {
+            size: 0,
+            head: None,
+        }
     }
 
-    /// Pushes an element onto the front of the linked list.
+    /// Pushes an element onto the front of the linked vector.
     ///
     /// # Arguments
     ///
-    /// * `data` - The data to be pushed onto the linked list.
+    /// * `data` - The data to be pushed onto the linked vector.
     ///
     /// # Examples
     ///
     /// ```
     /// use vec::LinkedVec;
     ///
-    /// let mut list = LinkedVec::new(0);
-    /// list.push(1);
-    /// assert_eq!(list.len(), 1);
+    /// let mut vec = LinkedVec::new(0);
+    /// vec.push(1);
+    /// assert_eq!(vec.len(), 1);
     /// ```
     pub fn push(&mut self, data: T) {
         let node = Node::new(data, None);
@@ -51,11 +54,10 @@ impl<T: Debug + Copy> LinkedVec<T> {
             self.head = Some(Box::new(node));
         } else {
             let mut current_node = self.head.as_mut().unwrap();
-            for _i in 0..self.size-1 {
+            for _i in 0..self.size - 1 {
                 current_node = current_node.next.as_mut().unwrap();
             }
             current_node.next = Some(Box::new(node));
-
         }
         self.size += 1;
     }
@@ -86,7 +88,7 @@ impl<T: Debug + Copy> LinkedVec<T> {
     /// ```
     pub fn append(&mut self, other: &mut Self) {
         while let Some(node) = other.head.as_mut().take() {
-            self.push(node.data);
+            self.push(node.data.clone());
             other.head = node.next.take();
         }
         other.clear();
@@ -130,7 +132,7 @@ impl<T: Debug + Copy> LinkedVec<T> {
             self.head = Some(Box::new(node));
         } else {
             let mut node_before = self.head.as_mut().unwrap();
-            for _i in 0..index-1 {
+            for _i in 0..index - 1 {
                 node_before = node_before.next.as_mut().unwrap();
             }
             node.next = node_before.next.take();
@@ -140,21 +142,21 @@ impl<T: Debug + Copy> LinkedVec<T> {
         self.size += 1;
     }
 
-    /// Pops an element from the front of the linked list.
+    /// Pops an element from the front of the linked vector.
     ///
     /// # Returns
     ///
-    /// An option containing the popped data, or None if the linked list is empty.
+    /// An option containing the popped data, or None if the linked vector is empty.
     ///
     /// # Examples
     ///
     /// ```
     /// use vec::LinkedVec;
     ///
-    /// let mut list = LinkedVec::new(0);
-    /// list.push(1);
-    /// assert_eq!(list.pop(), Some(1));
-    /// assert_eq!(list.is_empty(), true);
+    /// let mut vec = LinkedVec::new(0);
+    /// vec.push(1);
+    /// assert_eq!(vec.pop(), Some(1));
+    /// assert_eq!(vec.is_empty(), true);
     /// ```
     pub fn pop(&mut self) -> Option<T> {
         if self.is_empty() {
@@ -200,7 +202,7 @@ impl<T: Debug + Copy> LinkedVec<T> {
             self.head = node.next.take();
         } else {
             let mut node_before = self.head.as_mut().unwrap();
-            for _i in 0..index-1 {
+            for _i in 0..index - 1 {
                 node_before = node_before.next.as_mut().unwrap();
             }
             node = node_before.next.take().unwrap();
@@ -211,57 +213,57 @@ impl<T: Debug + Copy> LinkedVec<T> {
         Some(node.data)
     }
 
-    /// Checks if the linked list is empty.
+    /// Checks if the linked vector is empty.
     ///
     /// # Returns
     ///
-    /// A boolean value indicating whether the linked list is empty.
+    /// A boolean value indicating whether the linked vector is empty.
     ///
     /// # Examples
     ///
     /// ```
     /// use vec::LinkedVec;
     ///
-    /// let mut list = LinkedVec::new(0);
-    /// assert_eq!(list.is_empty(), true);
-    /// list.push(1);
-    /// assert_eq!(list.is_empty(), false);
+    /// let mut vec = LinkedVec::new(0);
+    /// assert_eq!(vec.is_empty(), true);
+    /// vec.push(1);
+    /// assert_eq!(vec.is_empty(), false);
     /// ```
     pub fn is_empty(&self) -> bool {
         self.size == 0
     }
 
-    /// Returns the size of the linked list.
+    /// Returns the size of the linked vector.
     ///
     /// # Returns
     ///
-    /// The number of elements in the linked list.
+    /// The number of elements in the linked vector.
     ///
     /// # Examples
     ///
     /// ```
     /// use vec::LinkedVec;
     ///
-    /// let mut list = LinkedVec::new(0);
-    /// assert_eq!(list.len(), 0);
-    /// list.push(1);
-    /// assert_eq!(list.len(), 1);
+    /// let mut vec = LinkedVec::new(0);
+    /// assert_eq!(vec.len(), 0);
+    /// vec.push(1);
+    /// assert_eq!(vec.len(), 1);
     /// ```
     pub fn len(&self) -> usize {
         self.size
     }
 
-    /// Clears the linked list, removing all elements.
+    /// Clears the linked vector, removing all elements.
     ///
     /// # Examples
     ///
     /// ```
     /// use vec::LinkedVec;
     ///
-    /// let mut list = LinkedVec::new(0);
-    /// list.push(1);
-    /// list.clear();
-    /// assert_eq!(list.is_empty(), true);
+    /// let mut vec = LinkedVec::new(0);
+    /// vec.push(1);
+    /// vec.clear();
+    /// assert_eq!(vec.is_empty(), true);
     /// ```
     pub fn clear(&mut self) {
         self.size = 0;
@@ -291,34 +293,33 @@ impl<T: Debug + Copy> LinkedVec<T> {
     /// assert_eq!(linked_vec.find(1), Some(2));
     /// assert_eq!(linked_vec.find(3), None);
     /// ```
-    pub fn find(&mut self, mut index: usize) -> Option<T> {
+    pub fn find(&mut self, index: usize) -> Option<T> {
         if self.size <= index || self.is_empty() {
             None
-        } else {   
+        } else {
             let mut node = self.head.as_mut().unwrap();
             for _i in 0..index {
                 node = node.next.as_mut().unwrap();
             }
-            Some(node.data)
+            Some(node.data.clone())
         }
-            
     }
 
-    /// Returns an iterator over the elements of the linked list.
+    /// Returns an iterator over the elements of the linked vector.
     ///
     /// # Returns
     ///
-    /// An iterator yielding references to the elements of the linked list.
+    /// An iterator yielding references to the elements of the linked vector.
     ///
     /// # Examples
     ///
     /// ```
     /// use vec::LinkedVec;
     ///
-    /// let mut list = LinkedVec::new(0);
-    /// list.push(1);
-    /// list.push(2);
-    /// let mut iter = list.iter();
+    /// let mut vec = LinkedVec::new(0);
+    /// vec.push(1);
+    /// vec.push(2);
+    /// let mut iter = vec.iter();
     /// assert_eq!(iter.next(), Some(&2));
     /// assert_eq!(iter.next(), Some(&1));
     /// assert_eq!(iter.next(), None);
@@ -329,21 +330,21 @@ impl<T: Debug + Copy> LinkedVec<T> {
         }
     }
 
-    /// Returns a mutable iterator over the elements of the linked list.
+    /// Returns a mutable iterator over the elements of the linked vector.
     ///
     /// # Returns
     ///
-    /// A mutable iterator yielding references to the elements of the linked list.
+    /// A mutable iterator yielding references to the elements of the linked vector.
     ///
     /// # Examples
     ///
     /// ```
     /// use vec::LinkedVec;
     ///
-    /// let mut list = LinkedVec::new(0);
-    /// list.push(1);
-    /// list.push(2);
-    /// let mut iter = list.iter_mut();
+    /// let mut vec = LinkedVec::new(0);
+    /// vec.push(1);
+    /// vec.push(2);
+    /// let mut iter = vec.iter_mut();
     /// if let Some(data) = iter.next() {
     ///     *data = 3;
     /// }
@@ -356,21 +357,21 @@ impl<T: Debug + Copy> LinkedVec<T> {
         }
     }
 
-    /// Consumes the linked list and returns an iterator over its elements.
+    /// Consumes the linked vector and returns an iterator over its elements.
     ///
     /// # Returns
     ///
-    /// An iterator consuming the linked list and yielding its elements.
+    /// An iterator consuming the linked vector and yielding its elements.
     ///
     /// # Examples
     ///
     /// ```
     /// use vec::LinkedVec;
     ///
-    /// let mut list = LinkedVec::new(0);
-    /// list.push(1);
-    /// list.push(2);
-    /// let mut iter = list.into_iter();
+    /// let mut vec = LinkedVec::new(0);
+    /// vec.push(1);
+    /// vec.push(2);
+    /// let mut iter = vec.into_iter();
     /// assert_eq!(iter.next(), Some(2));
     /// assert_eq!(iter.next(), Some(1));
     /// assert_eq!(iter.next(), None);
@@ -379,7 +380,7 @@ impl<T: Debug + Copy> LinkedVec<T> {
         IntoIter(self)
     }
 
-    /// Prints the elements of the linked list.
+    /// Prints the elements of the linked vector.
     ///
     /// # Examples
     ///
@@ -398,7 +399,7 @@ impl<T: Debug + Copy> LinkedVec<T> {
     }
 }
 
-/// Iterator over the elements of a linked list.
+/// Iterator over the elements of a linked vector.
 pub struct Iter<'a, T: 'a> {
     next: Option<&'a Node<T>>,
 }
@@ -414,7 +415,7 @@ impl<'a, T> Iterator for Iter<'a, T> {
     }
 }
 
-/// Mutable iterator over the elements of a linked list.
+/// Mutable iterator over the elements of a linked vector.
 pub struct IterMut<'a, T: 'a> {
     next: Option<&'a mut Node<T>>,
 }
@@ -430,10 +431,10 @@ impl<'a, T> Iterator for IterMut<'a, T> {
     }
 }
 
-/// Consuming iterator over the elements of a linked list.
-pub struct IntoIter<T: Copy + Debug>(LinkedVec<T>);
+/// Consuming iterator over the elements of a linked vector.
+pub struct IntoIter<T: Clone + Debug>(LinkedVec<T>);
 
-impl<T: Copy + Debug> Iterator for IntoIter<T> {
+impl<T: Clone + Debug> Iterator for IntoIter<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -441,7 +442,7 @@ impl<T: Copy + Debug> Iterator for IntoIter<T> {
     }
 }
 
-/// Custom drop implementation for releasing linked list memory.
+/// Custom drop implementation for releasing linked vector memory.
 impl<T> Drop for LinkedVec<T> {
     fn drop(&mut self) {
         let mut link = self.head.take();

@@ -35,6 +35,8 @@ version = "0.1.0"
 dependencies = [
  "hash_map",
  "queue",
+ "stack",
+ "vec",
 ]
 
 [[package]]
