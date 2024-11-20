@@ -1,6 +1,7 @@
 use graph::{
     breadth_first_search::breadth_first_search, depth_first_search::depth_first_search,
-    graph::Graph, knight_tour_puzzle::knight_tour_puzzle, word_ladder_puzzle::word_ladder_puzzle,
+    graph::Graph, knight_tour_puzzle::knight_tour_puzzle, topological_sort::topological_sort,
+    word_ladder_puzzle::word_ladder_puzzle,
 };
 
 fn main() {
@@ -9,6 +10,7 @@ fn main() {
     test_word_ladder_puzzle_find_shortest_distance_with_bfs();
     test_knight_tour_puzzle();
     test_depth_first_search();
+    test_topological_sort();
 }
 
 fn test_graph() {
@@ -125,4 +127,26 @@ fn test_depth_first_search() {
 
     println!("Path: {:?}", result.1);
     println!("Total distance: {}", result.0);
+}
+
+fn test_topological_sort() {
+    println!("\n\n***TOPOLOGICAL SORT***");
+
+    let edges = vec![
+        ("Mix", "3/4 cup of milk"),
+        ("Mix", "1 egg"),
+        ("Mix", "1 tablespoon olive oil"),
+        ("Pour in 1/4 cup", "Mix"),
+        ("Pour in 1/4 cup", "Heat the pan"),
+        ("Flip the bottom until golden", "Pour in 1/4 cup"),
+        ("Enjoy", "Flip the bottom until golden"),
+        ("Enjoy", "Heat the sauce"),
+    ];
+    let order = topological_sort(edges.clone());
+    if order.is_none() {
+        println!("The graph has a cycle");
+    } else {
+        println!("The graph has no cycle. Order:");
+        order.unwrap().print();
+    }
 }

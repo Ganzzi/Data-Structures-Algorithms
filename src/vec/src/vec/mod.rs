@@ -397,6 +397,14 @@ impl<T: Debug + Clone> LinkedVec<T> {
             print!("{:?} ", data);
         }
     }
+
+    pub fn to_vec(&self) -> Vec<T> {
+        let mut vec = Vec::with_capacity(self.size);
+        for data in self.iter() {
+            vec.push(data.clone());
+        }
+        vec
+    }
 }
 
 /// Iterator over the elements of a linked vector.
