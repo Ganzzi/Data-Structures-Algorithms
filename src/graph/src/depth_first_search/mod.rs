@@ -58,10 +58,8 @@ pub fn depth_first_search<
 
     let mut predecessors: HashMap<T, Option<T>> = HashMap::with_capacity(graph.vertices_count());
     let mut distances = HashMap::with_capacity(graph.vertices_count());
-    for key in graph.get_vertex_keys() {
-        distances.insert(key.clone(), U::default());
-        predecessors.insert(key.clone(), None);
-    }
+    distances.insert(start.get_key().clone(), U::default());
+    predecessors.insert(start.get_key().clone(), None);
 
     let mut stack = Stack::new();
     stack.push(start.clone());
@@ -93,7 +91,7 @@ pub fn depth_first_search<
                     .add(neighbor.1.clone());
 
                 return (total_distance, path);
-            } else if distances.get(&neighbor.0).unwrap() == &U::default() {
+            } else if distances.get(&neighbor.0).is_none() {
                 let neighbor_distance = distances
                     .get(vertex.get_key())
                     .unwrap()

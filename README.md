@@ -62,6 +62,16 @@ This Rust project aims to implement various data structures and algorithms to he
    - Binary Heap: A Binary Heap is essentially a binary tree that allows queuing and dequeuing, make it ideal for efficient scheduling system. It stores data in a linear data structure. In this implementation, min-heap is choosen to store data with the smallest is at the top.
    - AVL - Balanced Binary Search Tree: An AVL Tree is a self-balancing binary search tree where the balance factor (the difference in heights between the left and right subtree) is at most once. It automatically rebalances during insertion.
 
+8. Graph
+   - Breadth-first search: An algorithm to find the shortest path between two vertices in a graph. It travels the graph level by level and use a queue to keep track of the vertices to visit next.
+   - Word Ladder Puzzle: A game that uses breadth-first search approach to find the shortest path between two words in a list of words. It use graph to represent the words and their connections to other words that are determined by the the difference by only one letter.
+   - Knight's Tour Puzzle: A mathematical problem involving a knight is placed on any square of the board and move to every square on the board ensuring visiting each one exactly once. It is a specific case of the depth-first search algorithm, which aims to create the deepest possible tree.
+   - Depth First Search: An algorithm to find the shortet path between two vertices in a graph. It travels the graph depth by depth and use a stack to keep track of the vertices to visit next.
+   - Topological Sort: A variant of depth-first search. It produces a linear ordering of vertices in a directed acyclic graph.
+   - BFS Strongly Connected Components: An algorithm to find all the connected vertices in a directed graph. It uses breadth-first seach approach to traverse the graph
+   - DFS Strongly Connected Components: An algorithm to find all the connected vertices in a directed graph. It uses depth-first seach approach to traverse the graph
+   - Dijkstra's Shortest Path: An algorithm to find the shortest distanced path between two vertices in a graph. It uses a priority queue to keep track of the vertices to visit next.
+
 ## Usage
 
 To use these functionalities, simply import the respective modules into your Rust code and utilize the provided functions. Example usage is provided in each module's documentation.
