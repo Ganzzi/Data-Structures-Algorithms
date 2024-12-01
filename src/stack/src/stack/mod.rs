@@ -1,3 +1,7 @@
+use std::fmt::Debug;
+
+use vec::vec::LinkedVec;
+
 /// A generic stack data structure implemented using a vector.
 ///
 /// # Generic Parameters
@@ -11,7 +15,7 @@
 /// # Examples
 ///
 /// ```
-/// use stack::Stack;
+/// use crate::stack::stack::Stack;
 ///
 /// let mut stack: Stack<i32> = Stack::new();
 ///
@@ -26,17 +30,19 @@
 /// ```
 #[derive(Debug)]
 pub struct Stack<T> {
-    data: Vec<T>,
+    data: LinkedVec<T>,
 }
 
-impl<T> Stack<T> {
+impl<T: Debug + Clone + PartialEq> Stack<T> {
     /// Creates a new empty stack.
     ///
     /// # Returns
     ///
     /// A new empty stack.
     pub fn new() -> Self {
-        Stack { data: Vec::new() }
+        Stack {
+            data: LinkedVec::new(),
+        }
     }
 
     /// Pushes an element onto the stack.
@@ -63,7 +69,9 @@ impl<T> Stack<T> {
     ///
     /// A reference to the top element of the stack, or an error if the stack is empty.
     pub fn peek(&self) -> Result<&T, &'static str> {
-        self.data.last().ok_or("Stack is empty")
+        self.data
+            .peek()
+            .map_or(Err("Stack is empty"), |item| Ok(item))
     }
 
     /// Returns a mutable reference to the top element of the stack without removing it.
@@ -72,7 +80,9 @@ impl<T> Stack<T> {
     ///
     /// A mutable reference to the top element of the stack, or an error if the stack is empty.
     pub fn peek_mut(&mut self) -> Result<&mut T, &'static str> {
-        self.data.last_mut().ok_or("Stack is empty")
+        self.data
+            .peek_mut()
+            .map_or(Err("Stack is empty"), |item| Ok(item))
     }
 
     /// Clears the stack, removing all elements.
@@ -104,7 +114,7 @@ impl<T> Stack<T> {
     ///
     /// An iterator yielding references to the elements of the stack in reverse order.
     pub fn iter(&self) -> impl Iterator<Item = &T> {
-        self.data.iter().rev()
+        self.data.iter()
     }
 
     /// Returns a mutable iterator over the elements of the stack.
@@ -113,7 +123,7 @@ impl<T> Stack<T> {
     ///
     /// A mutable iterator yielding references to the elements of the stack in reverse order.
     pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut T> {
-        self.data.iter_mut().rev()
+        self.data.iter_mut()
     }
 
     /// Consumes the stack and returns an iterator over its elements.
@@ -122,6 +132,6 @@ impl<T> Stack<T> {
     ///
     /// An iterator consuming the stack and yielding its elements in reverse order.
     pub fn into_iter(self) -> impl Iterator<Item = T> {
-        self.data.into_iter().rev()
+        self.data.into_iter()
     }
 }

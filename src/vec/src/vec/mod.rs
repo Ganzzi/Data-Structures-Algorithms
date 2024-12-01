@@ -1,17 +1,154 @@
-use std::fmt::Debug;
+use std::ops::{Index, IndexMut, Range, RangeFrom, RangeTo};
+use std::{cmp::Ordering, fmt::Debug};
 
-use linked_list::linked_list::{Next, Node};
+/// Type alias for a singly linked list node with an optional next node.
+pub type Next<T> = Option<Box<Node<T>>>;
+
+/// Represents a node in a singly linked list.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Node<T> {
+    /// The data stored in the node.
+    pub data: T,
+    /// Pointer to the next node in the linked list.
+    pub next: Next<T>,
+}
+
+impl<T> Node<T> {
+    /// Creates a new node with the given data and next node pointer.
+    pub fn new(data: T, next: Next<T>) -> Self {
+        Node { data, next }
+    }
+}
+
+#[macro_export]
+macro_rules! linked_vec {
+    ($($elem:expr),* $(,)?) => {{
+        let mut vec = $crate::vec::LinkedVec::new();
+        $(
+            vec.push($elem);
+        )*
+        vec
+    }};
+    ($elem:expr; $size:expr) => {{
+        let mut vec = $crate::vec::LinkedVec::new();
+        for _ in 0..$size {
+            vec.push($elem.clone());
+        }
+        vec
+    }};
+}
 
 /// Represents a singly linked vector.
-#[derive(Debug)]
+///
+/// # Generic Parameters
+///
+/// * `T` - Type of elements stored in the linked vector.
+///
+/// # Fields
+///
+/// * `size` - The size of the linked vector.
+/// * `head` - Pointer to the head node of the linked vector.
+///
+/// # Examples
+///
+/// ```
+/// use crate::vec::vec::LinkedVec;
+///
+/// let mut vec: LinkedVec<i32> = LinkedVec::new();
+/// vec.push(1);
+/// vec.push(2);
+/// vec.push(3);
+/// let last = vec.pop();
+///
+/// assert_eq!(vec.len(), 2);
+/// assert_eq!(last, Some(3));
+/// ```
+#[derive(Debug, Clone, PartialEq)]
 pub struct LinkedVec<T> {
     /// The size of the linked vector.
     size: usize,
     /// Pointer to the head node of the linked vector.
     head: Next<T>,
 }
+impl<T: Clone + Debug + PartialEq> std::ops::Index<usize> for LinkedVec<T> {
+    type Output = T;
 
-impl<T: Debug + Clone> LinkedVec<T> {
+    fn index(&self, index: usize) -> &Self::Output {
+        self.find(index).expect("Index out of bounds")
+    }
+}
+
+impl<T: Clone + Debug + PartialEq> std::ops::IndexMut<usize> for LinkedVec<T> {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        self.find_mut(index).expect("Index out of bounds")
+    }
+}
+
+impl<T: Clone + Debug + PartialEq> Index<Range<usize>> for LinkedVec<T> {
+    type Output = [T];
+
+    fn index(&self, range: Range<usize>) -> &Self::Output {
+        let vec: Vec<T> = range
+            .map(|i| self.find(i).expect("Index out of bounds").clone())
+            .collect();
+        Box::leak(vec.into_boxed_slice())
+    }
+}
+
+impl<T: Clone + Debug + PartialEq> IndexMut<Range<usize>> for LinkedVec<T> {
+    fn index_mut(&mut self, range: Range<usize>) -> &mut Self::Output {
+        let mut result = LinkedVec::new();
+        for i in range {
+            result.push(self.find_mut(i).expect("Index out of bounds").clone());
+        }
+        Box::leak(result.to_vec().into_boxed_slice())
+    }
+}
+
+impl<T: Clone + Debug + PartialEq> Index<RangeTo<usize>> for LinkedVec<T> {
+    type Output = LinkedVec<T>;
+
+    fn index(&self, range: RangeTo<usize>) -> &Self::Output {
+        let mut result = LinkedVec::new();
+        for i in 0..range.end {
+            result.push(self.find(i).expect("Index out of bounds").clone());
+        }
+        Box::leak(Box::new(result))
+    }
+}
+
+impl<T: Clone + Debug + PartialEq> IndexMut<RangeTo<usize>> for LinkedVec<T> {
+    fn index_mut(&mut self, range: RangeTo<usize>) -> &mut Self::Output {
+        let mut result = LinkedVec::new();
+        for i in 0..range.end {
+            result.push(self.find_mut(i).expect("Index out of bounds").clone());
+        }
+        Box::leak(Box::new(result))
+    }
+}
+
+impl<T: Clone + Debug + PartialEq> Index<RangeFrom<usize>> for LinkedVec<T> {
+    type Output = LinkedVec<T>;
+
+    fn index(&self, range: RangeFrom<usize>) -> &Self::Output {
+        let mut result = LinkedVec::new();
+        for i in range.start..self.size {
+            result.push(self.find(i).expect("Index out of bounds").clone());
+        }
+        Box::leak(Box::new(result))
+    }
+}
+impl<T: Clone + Debug + PartialEq> IndexMut<RangeFrom<usize>> for LinkedVec<T> {
+    fn index_mut(&mut self, range: RangeFrom<usize>) -> &mut Self::Output {
+        let mut result = LinkedVec::new();
+        for i in range.start..self.size {
+            result.push(self.find_mut(i).expect("Index out of bounds").clone());
+        }
+        Box::leak(Box::new(result))
+    }
+}
+
+impl<T: Debug + Clone + PartialEq> LinkedVec<T> {
     /// Creates a new empty linked vector with the specified size.
     ///
     /// # Returns
@@ -21,10 +158,10 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// # Examples
     ///
     /// ```
-    /// use vec::LinkedVec;
+    /// use crate::vec::vec::LinkedVec;
     ///
     /// let vec: LinkedVec<i32> = LinkedVec::new();
-    /// assert_eq!(vec.size(), 0);
+    /// assert_eq!(vec.len(), 0);
     /// ```
     pub fn new() -> Self {
         LinkedVec {
@@ -42,9 +179,9 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// # Examples
     ///
     /// ```
-    /// use vec::LinkedVec;
+    /// use crate::vec::vec::LinkedVec;
     ///
-    /// let mut vec = LinkedVec::new(0);
+    /// let mut vec = LinkedVec::new();
     /// vec.push(1);
     /// assert_eq!(vec.len(), 1);
     /// ```
@@ -71,7 +208,7 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// # Examples
     ///
     /// ```
-    /// use vec::LinkedVec;
+    /// use crate::vec::vec::LinkedVec;
     ///
     /// let mut linked_vec1 = LinkedVec::new();
     /// linked_vec1.push(1);
@@ -83,8 +220,8 @@ impl<T: Debug + Clone> LinkedVec<T> {
     ///
     /// linked_vec1.append(&mut linked_vec2);
     ///
-    /// assert_eq!(linked_vec1.size(), 4);
-    /// assert_eq!(linked_vec2.size(), 0);
+    /// assert_eq!(linked_vec1.len(), 4);
+    /// assert_eq!(linked_vec2.len(), 0);
     /// ```
     pub fn append(&mut self, other: &mut Self) {
         while let Some(node) = other.head.as_mut().take() {
@@ -106,7 +243,7 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// # Examples
     ///
     /// ```
-    /// use vec::LinkedVec;
+    /// use crate::vec::vec::LinkedVec;
     ///
     /// let mut linked_vec = LinkedVec::new();
     /// linked_vec.push(1);
@@ -114,7 +251,7 @@ impl<T: Debug + Clone> LinkedVec<T> {
     ///
     /// linked_vec.insert(1, 2);
     ///
-    /// assert_eq!(linked_vec.size(), 3);
+    /// assert_eq!(linked_vec.len(), 3);
     /// assert_eq!(linked_vec.pop(), Some(3));
     /// assert_eq!(linked_vec.pop(), Some(2));
     /// assert_eq!(linked_vec.pop(), Some(1));
@@ -151,9 +288,9 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// # Examples
     ///
     /// ```
-    /// use vec::LinkedVec;
+    /// use crate::vec::vec::LinkedVec;
     ///
-    /// let mut vec = LinkedVec::new(0);
+    /// let mut vec = LinkedVec::new();
     /// vec.push(1);
     /// assert_eq!(vec.pop(), Some(1));
     /// assert_eq!(vec.is_empty(), true);
@@ -163,6 +300,61 @@ impl<T: Debug + Clone> LinkedVec<T> {
             None
         } else {
             self.remove(self.size - 1)
+        }
+    }
+
+    /// Returns a reference to the last element in the linked vector, or None if it is empty.
+    ///
+    /// # Returns
+    ///
+    /// An option containing a reference to the last element, or None if the linked vector is empty.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::vec::vec::LinkedVec;
+    ///
+    /// let mut vec = LinkedVec::new();
+    /// vec.push(1);
+    /// assert_eq!(vec.peek(), Some(1));
+    /// vec.push(2);
+    /// assert_eq!(vec.peek(), Some(2));
+    /// vec.pop();
+    /// assert_eq!(vec.peek(), Some(1));
+    /// vec.pop();
+    /// assert_eq!(vec.peek(), None);
+    /// ```
+    pub fn peek(&self) -> Option<&T> {
+        if self.is_empty() {
+            None
+        } else {
+            self.find(self.size - 1)
+        }
+    }
+
+    /// Returns a mutable reference to the last element in the linked vector, or None if it is empty.
+    ///
+    /// # Returns
+    ///
+    /// An option containing a mutable reference to the last element, or None if the linked vector is empty.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::vec::vec::LinkedVec;
+    ///
+    /// let mut vec = LinkedVec::new();
+    /// vec.push(1);
+    /// if let Some(data) = vec.peek_mut() {
+    ///     *data = 2;
+    /// }
+    /// assert_eq!(vec.peek(), Some(2));
+    /// ```
+    pub fn peek_mut(&mut self) -> Option<&mut T> {
+        if self.is_empty() {
+            None
+        } else {
+            self.find_mut(self.size - 1)
         }
     }
 
@@ -179,7 +371,7 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// # Examples
     ///
     /// ```
-    /// use vec::LinkedVec;
+    /// use crate::vec::vec::LinkedVec;
     ///
     /// let mut linked_vec = LinkedVec::new();
     /// linked_vec.push(1);
@@ -187,9 +379,9 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// linked_vec.push(3);
     ///
     /// assert_eq!(linked_vec.remove(1), Some(2));
-    /// assert_eq!(linked_vec.size(), 2);
+    /// assert_eq!(linked_vec.len(), 2);
     /// assert_eq!(linked_vec.remove(1), Some(3));
-    /// assert_eq!(linked_vec.size(), 1);
+    /// assert_eq!(linked_vec.len(), 1);
     /// ```
     pub fn remove(&mut self, index: usize) -> Option<T> {
         if self.size < index {
@@ -222,9 +414,9 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// # Examples
     ///
     /// ```
-    /// use vec::LinkedVec;
+    /// use crate::vec::vec::LinkedVec;
     ///
-    /// let mut vec = LinkedVec::new(0);
+    /// let mut vec = LinkedVec::new();
     /// assert_eq!(vec.is_empty(), true);
     /// vec.push(1);
     /// assert_eq!(vec.is_empty(), false);
@@ -242,9 +434,9 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// # Examples
     ///
     /// ```
-    /// use vec::LinkedVec;
+    /// use crate::vec::vec::LinkedVec;
     ///
-    /// let mut vec = LinkedVec::new(0);
+    /// let mut vec = LinkedVec::new();
     /// assert_eq!(vec.len(), 0);
     /// vec.push(1);
     /// assert_eq!(vec.len(), 1);
@@ -258,9 +450,9 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// # Examples
     ///
     /// ```
-    /// use vec::LinkedVec;
+    /// use crate::vec::vec::LinkedVec;
     ///
-    /// let mut vec = LinkedVec::new(0);
+    /// let mut vec = LinkedVec::new();
     /// vec.push(1);
     /// vec.clear();
     /// assert_eq!(vec.is_empty(), true);
@@ -283,7 +475,7 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// # Examples
     ///
     /// ```
-    /// use vec::LinkedVec;
+    /// use crate::vec::vec::LinkedVec;
     ///
     /// let mut linked_vec = LinkedVec::new();
     /// linked_vec.push(1);
@@ -293,7 +485,55 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// assert_eq!(linked_vec.find(1), Some(2));
     /// assert_eq!(linked_vec.find(3), None);
     /// ```
-    pub fn find(&mut self, index: usize) -> Option<T> {
+    pub fn find(&self, index: usize) -> Option<&T> {
+        if self.size <= index || self.is_empty() {
+            None
+        } else {
+            let mut node = self.head.as_ref().unwrap();
+            for _i in 0..index {
+                node = node.next.as_ref().unwrap();
+            }
+            Some(&node.data)
+        }
+    }
+
+    pub fn contains(&self, data: &T) -> bool {
+        let mut node = self.head.as_ref();
+        while let Some(n) = node {
+            if n.data == *data {
+                return true;
+            }
+            node = n.next.as_ref();
+        }
+        false
+    }
+
+    /// Finds and returns a mutable reference to the element at the specified index in the LinkedVec.
+    ///
+    /// # Arguments
+    ///
+    /// * `index` - The index of the element to be found.
+    ///
+    /// # Returns
+    ///
+    /// A mutable reference to the element at the specified index, or None if the index is out of bounds.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::vec::vec::LinkedVec;
+    ///
+    /// let mut linked_vec = LinkedVec::new();
+    /// linked_vec.push(1);
+    /// linked_vec.push(2);
+    /// linked_vec.push(3);
+    ///
+    /// if let Some(data) = linked_vec.find_mut(1) {
+    ///     *data = 4;
+    /// }
+    /// assert_eq!(linked_vec.find(1), Some(4));
+    /// ```
+    pub fn find_mut(&mut self, index: usize) -> Option<&mut T> {
         if self.size <= index || self.is_empty() {
             None
         } else {
@@ -301,7 +541,7 @@ impl<T: Debug + Clone> LinkedVec<T> {
             for _i in 0..index {
                 node = node.next.as_mut().unwrap();
             }
-            Some(node.data.clone())
+            Some(&mut node.data)
         }
     }
 
@@ -314,14 +554,15 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// # Examples
     ///
     /// ```
-    /// use vec::LinkedVec;
+    /// use crate::vec::vec::LinkedVec;
     ///
-    /// let mut vec = LinkedVec::new(0);
+    /// let mut vec = LinkedVec::new();
     /// vec.push(1);
     /// vec.push(2);
     /// let mut iter = vec.iter();
-    /// assert_eq!(iter.next(), Some(&2));
+    ///
     /// assert_eq!(iter.next(), Some(&1));
+    /// assert_eq!(iter.next(), Some(&2));
     /// assert_eq!(iter.next(), None);
     /// ```
     pub fn iter(&self) -> Iter<T> {
@@ -339,16 +580,17 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// # Examples
     ///
     /// ```
-    /// use vec::LinkedVec;
+    /// use crate::vec::vec::LinkedVec;
     ///
-    /// let mut vec = LinkedVec::new(0);
+    /// let mut vec = LinkedVec::new();
     /// vec.push(1);
     /// vec.push(2);
     /// let mut iter = vec.iter_mut();
     /// if let Some(data) = iter.next() {
     ///     *data = 3;
     /// }
-    /// assert_eq!(iter.next(), Some(&mut 1));
+    ///
+    /// assert_eq!(iter.next(), Some(&mut 2));
     /// assert_eq!(iter.next(), None);
     /// ```
     pub fn iter_mut(&mut self) -> IterMut<T> {
@@ -366,9 +608,9 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// # Examples
     ///
     /// ```
-    /// use vec::LinkedVec;
+    /// use crate::vec::vec::LinkedVec;
     ///
-    /// let mut vec = LinkedVec::new(0);
+    /// let mut vec = LinkedVec::new();
     /// vec.push(1);
     /// vec.push(2);
     /// let mut iter = vec.into_iter();
@@ -385,7 +627,7 @@ impl<T: Debug + Clone> LinkedVec<T> {
     /// # Examples
     ///
     /// ```
-    /// use vec::LinkedVec;
+    /// use crate::vec::vec::LinkedVec;
     ///
     /// let mut linked_vec = LinkedVec::new();
     /// linked_vec.push(1);
@@ -398,12 +640,185 @@ impl<T: Debug + Clone> LinkedVec<T> {
         }
     }
 
+    /// Converts the linked vector into a standard Vec.
+    ///
+    /// # Returns
+    ///
+    /// A Vec containing all elements of the linked vector.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::vec::vec::LinkedVec;
+    ///
+    /// let mut linked_vec = LinkedVec::new();
+    /// linked_vec.push(1);
+    /// linked_vec.push(2);
+    /// let vec = linked_vec.to_vec();
+    /// assert_eq!(vec, vec![1, 2]);
+    /// ```
     pub fn to_vec(&self) -> Vec<T> {
         let mut vec = Vec::with_capacity(self.size);
         for data in self.iter() {
             vec.push(data.clone());
         }
         vec
+    }
+
+    /// Swaps the elements at the specified indices in the LinkedVec.
+    ///
+    /// # Arguments
+    ///
+    /// * `index1` - The index of the first element.
+    /// * `index2` - The index of the second element.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::vec::vec::LinkedVec;
+    ///
+    /// let mut linked_vec = LinkedVec::new();
+    /// linked_vec.push(1);
+    /// linked_vec.push(2);
+    /// linked_vec.push(3);
+    ///
+    /// linked_vec.swap(0, 2);
+    ///
+    /// assert_eq!(linked_vec.find(0), Some(&3));
+    /// assert_eq!(linked_vec.find(2), Some(&1));
+    /// ```
+    pub fn swap(&mut self, index1: usize, index2: usize) {
+        if index1 >= self.size || index2 >= self.size {
+            return;
+        }
+
+        if index1 == index2 {
+            return;
+        }
+
+        let data1 = self.find(index1).unwrap().clone();
+        let data2 = self.find(index2).unwrap().clone();
+
+        self.remove(index1);
+        self.insert(index1, data2);
+        self.remove(index2);
+        self.insert(index2, data1);
+    }
+
+    /// Reverses the order of elements in the LinkedVec.
+    ///
+    /// # Returns
+    ///
+    /// A new LinkedVec with the elements in reverse order.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::vec::vec::LinkedVec;
+    ///
+    /// let mut linked_vec = LinkedVec::new();
+    /// linked_vec.push(1);
+    /// linked_vec.push(2);
+    /// linked_vec.push(3);
+    ///
+    /// let reversed_vec = linked_vec.reverse();
+    ///
+    /// assert_eq!(reversed_vec.find(0), Some(&3));
+    /// assert_eq!(reversed_vec.find(1), Some(&2));
+    /// assert_eq!(reversed_vec.find(2), Some(&1));
+    /// ```
+    pub fn reverse(&self) -> Self {
+        let mut reversed_vec = LinkedVec::new();
+        let mut current = self.head.as_ref();
+
+        while let Some(node) = current {
+            reversed_vec.push_front(node.data.clone());
+            current = node.next.as_ref();
+        }
+
+        reversed_vec
+    }
+
+    fn push_front(&mut self, value: T) {
+        let new_node = Box::new(Node {
+            data: value,
+            next: self.head.take(),
+        });
+        self.head = Some(new_node);
+        self.size += 1;
+    }
+
+    /// Drains the elements from the linked vector, returning an iterator over the removed elements.
+    ///
+    /// # Returns
+    ///
+    /// An iterator yielding the removed elements.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::vec::vec::LinkedVec;
+    ///
+    /// let mut vec = LinkedVec::new();
+    /// vec.push(1);
+    /// vec.push(2);
+    /// vec.push(3);
+    ///
+    /// let mut drain_iter = vec.drain();
+    /// assert_eq!(drain_iter.next(), Some(1));
+    /// assert_eq!(drain_iter.next(), Some(2));
+    /// assert_eq!(drain_iter.next(), Some(3));
+    /// assert_eq!(drain_iter.next(), None);
+    /// assert_eq!(vec.len(), 0);
+    /// ```
+    pub fn drain(&mut self) -> Drain<T> {
+        Drain { linked_vec: self }
+    }
+
+    pub fn extend(&mut self, other: LinkedVec<T>) {
+        for data in other.iter() {
+            self.push(data.clone());
+        }
+    }
+
+    pub fn binary_search_by(&self, f: impl Fn(&T) -> Ordering) -> Result<usize, usize> {
+        let mut low = 0;
+        let mut high = self.size;
+
+        while low < high {
+            let mid = (low + high) / 2;
+            match f(self.find(mid).unwrap()) {
+                Ordering::Less => low = mid + 1,
+                Ordering::Greater => high = mid,
+                Ordering::Equal => return Ok(mid),
+            }
+        }
+
+        Err(low)
+    }
+
+    pub fn as_mut(&mut self) -> &mut Self {
+        self
+    }
+
+    pub fn copy_from_slice(&mut self, other: &LinkedVec<T>) {
+        self.clear();
+        for data in other.iter() {
+            self.push(data.clone());
+        }
+    }
+}
+
+/// Iterator over the drained elements of a linked vector.
+pub struct Drain<'a, T: 'a> {
+    pub linked_vec: &'a mut LinkedVec<T>,
+}
+
+impl<'a, T: Clone + Debug + PartialEq> Iterator for Drain<'a, T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.linked_vec.pop()
     }
 }
 
@@ -440,13 +855,23 @@ impl<'a, T> Iterator for IterMut<'a, T> {
 }
 
 /// Consuming iterator over the elements of a linked vector.
-pub struct IntoIter<T: Clone + Debug>(LinkedVec<T>);
+pub struct IntoIter<T: Clone + Debug + PartialEq>(LinkedVec<T>);
 
-impl<T: Clone + Debug> Iterator for IntoIter<T> {
+impl<T: Clone + Debug + PartialEq> Iterator for IntoIter<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.0.pop()
+    }
+}
+
+impl<T: Debug + Clone + PartialEq> FromIterator<T> for LinkedVec<T> {
+    fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self {
+        let mut linked_vec = LinkedVec::new();
+        for item in iter {
+            linked_vec.push(item);
+        }
+        linked_vec
     }
 }
 

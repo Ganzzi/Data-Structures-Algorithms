@@ -1,8 +1,8 @@
 use crate::deque::Deque;
 
-/// Checks if a given string is a palindrome using a deque.
+/// # Palindrome Checker
 ///
-/// A palindrome is a word, phrase, number, or other sequence of characters that reads the same forward and backward.
+/// Checks if a given string is a palindrome using a deque. A palindrome is a word, phrase, number, or other sequence of characters that reads the same forward and backward.
 ///
 /// # Arguments
 ///
@@ -15,7 +15,7 @@ use crate::deque::Deque;
 /// # Examples
 ///
 /// ```
-/// use deque::{Deque, palindrome_checker};
+/// use deque::palindrome_checker::palindrome_checker;
 ///
 /// let palindrome1 = "radar";
 /// let palindrome2 = "level";

@@ -2,6 +2,7 @@ use tree::{
     avl_tree::AVLTree, binary_heap::BinaryHeap, binary_search_tree::BinarySearchTree,
     binary_tree::BinaryTree,
 };
+use vec::linked_vec;
 
 fn main() {
     test_binary_tree();
@@ -28,7 +29,7 @@ fn test_binary_tree() {
     println!("Non-leaf size: {}", tree.none_leaf_size());
     println!("Tree depth: {}", tree.depth());
     println!("Min key: {:?}", tree.min_key());
-    println!("Max key: {:?}", tree.maxkey());
+    println!("Max key: {:?}", tree.max_key());
     println!("Contains 7: {}", tree.contains(&7));
     println!("Contains 20: {}", tree.contains(&20));
 
@@ -63,11 +64,11 @@ fn test_binary_heap() {
         println!("Popped element: {:?}", heap.pop());
     }
 
-    let data = vec![3, 1, 6, 5, 2, 4];
+    let data = linked_vec![3, 1, 6, 5, 2, 4];
     heap.build_new(&data);
     println!("Heap after build_new: {:?}", heap);
 
-    let additional_data = vec![7, 8, 9];
+    let additional_data = linked_vec![7, 8, 9];
     heap.build_add(additional_data);
     println!("Heap after build_add: {:?}", heap);
 }

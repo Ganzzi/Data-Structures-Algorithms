@@ -1,5 +1,8 @@
- 
-/// A generic queue data structure implemented using a vector.
+use std::fmt::Debug;
+
+use vec::vec::LinkedVec;
+
+/// A generic queue data structure implemented using a linked vector.
 ///
 /// # Generic Parameters
 ///
@@ -8,12 +11,12 @@
 /// # Fields
 ///
 /// * `cap` - Maximum capacity of the queue.
-/// * `data` - Internal vector storing the elements of the queue.
+/// * `data` - Internal linked vector storing the elements of the queue.
 ///
 /// # Examples
 ///
 /// ```
-/// use queue::Queue;
+/// use crate::queue::queue::Queue;
 ///
 /// let mut queue: Queue<i32> = Queue::new(5);
 ///
@@ -26,13 +29,13 @@
 ///
 /// assert_eq!(dequeued, Some(1));
 /// ```
- #[derive(Debug)]
+#[derive(Debug)]
 pub struct Queue<T> {
     cap: usize,
-    data: Vec<T>
+    data: LinkedVec<T>,
 }
 
-impl<T> Queue<T>  {
+impl<T: Debug + Clone + PartialEq> Queue<T> {
     /// Creates a new empty queue with the given maximum capacity.
     ///
     /// # Arguments
@@ -43,7 +46,10 @@ impl<T> Queue<T>  {
     ///
     /// A new empty queue with the specified capacity.
     pub fn new(size: usize) -> Self {
-        Queue { cap: size, data: Vec::with_capacity(size) }
+        Queue {
+            cap: size,
+            data: LinkedVec::new(),
+        }
     }
 
     /// Enqueues an element into the queue.
@@ -55,9 +61,9 @@ impl<T> Queue<T>  {
     /// # Returns
     ///
     /// `Ok(())` if successful, otherwise returns an error if the queue is full.
-    pub fn enqueue(&mut self, item: T) -> Result<(), String>{
+    pub fn enqueue(&mut self, item: T) -> Result<(), String> {
         if self.cap == self.data.len() {
-            return  Err("Max size!".into());
+            return Err("Max size!".into());
         }
 
         self.data.insert(0, item);
@@ -93,8 +99,8 @@ impl<T> Queue<T>  {
     }
 
     /// Clears the queue, removing all elements.
-    pub fn clear(&mut self){
-        self.data = Vec::with_capacity(self.cap);
+    pub fn clear(&mut self) {
+        self.data = LinkedVec::new();
     }
 
     /// Returns an iterator over the elements of the queue.
@@ -102,7 +108,7 @@ impl<T> Queue<T>  {
     /// # Returns
     ///
     /// An iterator yielding references to the elements of the queue.
-    pub fn iter (&self) -> impl Iterator<Item = &T> {
+    pub fn iter(&self) -> impl Iterator<Item = &T> {
         self.data.iter()
     }
 

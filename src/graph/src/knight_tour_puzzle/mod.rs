@@ -1,5 +1,6 @@
 use crate::graph::{vertex::Vertex, Graph};
 use hash_map::hash_map::HashMap;
+use vec::{linked_vec, vec::LinkedVec};
 
 /// # Knight's Tour Puzzle
 ///
@@ -12,7 +13,7 @@ use hash_map::hash_map::HashMap;
 ///
 /// # Returns
 ///
-/// Option of a vector containing the path of the knight's tour.
+/// Option of a linked vector containing the path of the knight's tour.
 ///
 /// # Example
 ///
@@ -29,7 +30,7 @@ use hash_map::hash_map::HashMap;
 /// }
 ///
 /// ```
-pub fn knight_tour_puzzle(board_size: u32, start: u32) -> Option<Vec<u32>> {
+pub fn knight_tour_puzzle(board_size: u32, start: u32) -> Option<LinkedVec<u32>> {
     let calc_point =
         |row: u32, col: u32, board_size: u32| -> u32 { (row % board_size) * board_size + col };
 
@@ -37,7 +38,7 @@ pub fn knight_tour_puzzle(board_size: u32, start: u32) -> Option<Vec<u32>> {
     for row_cord in 0..board_size {
         for col_cord in 0..board_size {
             let valid_modes = valid_moves(row_cord, col_cord, board_size);
-            for cords in valid_modes {
+            for cords in valid_modes.iter() {
                 let src = calc_point(row_cord, col_cord, board_size);
                 let des = calc_point(cords.0, cords.1, board_size);
                 graph.add_edge(&src, &des, 1);
@@ -45,7 +46,7 @@ pub fn knight_tour_puzzle(board_size: u32, start: u32) -> Option<Vec<u32>> {
         }
     }
 
-    let mut path = vec![];
+    let mut path = linked_vec![];
     let mut explorations = HashMap::new();
     graph.get_vertex_keys().iter().for_each(|x| {
         explorations.insert(*x, false);
@@ -62,8 +63,8 @@ pub fn knight_tour_puzzle(board_size: u32, start: u32) -> Option<Vec<u32>> {
         return None;
     }
 
-    fn valid_moves(row_cord: u32, col_cord: u32, board_size: u32) -> Vec<(u32, u32)> {
-        let possible_moves = vec![
+    fn valid_moves(row_cord: u32, col_cord: u32, board_size: u32) -> LinkedVec<(u32, u32)> {
+        let possible_moves = linked_vec![
             (2, 1),
             (1, 2),
             (-1, 2),
@@ -76,8 +77,8 @@ pub fn knight_tour_puzzle(board_size: u32, start: u32) -> Option<Vec<u32>> {
         let is_valid_position =
             |x, y, board_size| x >= 0 && y >= 0 && x < board_size && y < board_size;
 
-        let mut moves = vec![];
-        for (x, y) in possible_moves {
+        let mut moves = linked_vec![];
+        for (x, y) in possible_moves.iter() {
             let new_row = row_cord as i32 + x;
             let new_col = col_cord as i32 + y;
             if is_valid_position(new_row, new_col, board_size as i32) {
@@ -91,7 +92,7 @@ pub fn knight_tour_puzzle(board_size: u32, start: u32) -> Option<Vec<u32>> {
     fn start_knight_tour(
         graph: &Graph<u32, u32>,
         board_size: u32,
-        path: &mut Vec<u32>,
+        path: &mut LinkedVec<u32>,
         explorations: &mut HashMap<u32, bool>,
         vertext: Vertex<u32, u32>,
         depth: u32,

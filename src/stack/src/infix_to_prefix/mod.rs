@@ -1,34 +1,33 @@
 use crate::stack::Stack;
 
-/// Prefix converter
+/// # Prefix converter
 ///
 /// Convert an infix string to a prefix string
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `infix` - The string to be converted (characters seperated by whitespace)
-/// 
+///
 /// # Examples
 ///
 /// ```
-/// use crate::infix_to_prefix::infix_to_prefix;
-/// 
+/// use crate::stack::infix_to_prefix::infix_to_prefix;
+///
 /// let infix = "( 2 + 3 ) * ( 4 + 2 + 1 ) / 5 * 3";
 /// let prefix = infix_to_prefix(infix);
 /// match prefix {
-///     Some(val) => { println!("{infix} -> {val}"); },
+///     Some(val) => assert_eq!(val, "* / * + 2 3 + + 4 2 1 5 3"),
 ///     None => {
 ///        println!("{infix} isn't a correct infix string");
 ///     },
 /// }
-/// // Output: ( 2 + 3 ) * ( 4 + 2 + 1 ) / 5 * 3 -> * + 2 3 / + 4 + 2 1 * 5 3
 /// ```
 pub fn infix_to_prefix(infix: &str) -> Option<String> {
     let mut op_stack = Stack::new();
     let mut prefix = Vec::new();
-    
+
     let src_str: Vec<&str> = infix.split_whitespace().rev().collect();
-    
+
     for char in src_str {
         if "0" <= char && char <= "9" {
             prefix.push(char);
@@ -41,32 +40,33 @@ pub fn infix_to_prefix(infix: &str) -> Option<String> {
                 top = op_stack.pop().unwrap();
             }
         } else {
-            while !op_stack.is_empty() && (precedence(op_stack.peek().unwrap()) > precedence(char)) {
+            while !op_stack.is_empty() && (precedence(op_stack.peek().unwrap()) > precedence(char))
+            {
                 prefix.push(op_stack.pop().unwrap());
             }
             op_stack.push(char);
         }
     }
-    
+
     while !op_stack.is_empty() {
         prefix.push(op_stack.pop().unwrap());
     }
 
     prefix.reverse();
-    
-    Some(prefix.join(" "))
-}
 
-// Helper function to determine precedence of operators
-fn precedence(op: &str) -> usize {
-    match op {
-        "+" | "-" => 1,
-        "*" | "/" => 2,
-        _ => 0, // For parentheses
+    return Some(prefix.join(" "));
+
+    // Helper function to determine precedence of operators
+    fn precedence(op: &str) -> usize {
+        match op {
+            "+" | "-" => 1,
+            "*" | "/" => 2,
+            _ => 0, // For parentheses
+        }
     }
 }
 
-/// Prefix Calculator
+/// # Prefix Calculator
 ///
 /// Calculates the result of an integer prefix expression.
 ///
@@ -77,12 +77,12 @@ fn precedence(op: &str) -> usize {
 /// # Examples
 ///
 /// ```
-/// use crate::prefix_eval;
+/// use crate::stack::infix_to_prefix::prefix_eval;
 ///
 /// let prefix = "* / * + 2 3 + + 4 2 1 5 3";
 /// let res = prefix_eval(prefix).unwrap();
 /// println!("Prefix Eval = {:?}", res);
-/// // Output: Result: 21
+/// assert_eq!(res, 21);
 /// ```
 pub fn prefix_eval(prefix: &str) -> Option<i32> {
     // Ensure the input prefix expression is valid
@@ -110,18 +110,21 @@ pub fn prefix_eval(prefix: &str) -> Option<i32> {
     }
 
     // The final result is the top element of the stack
-    Some(op_stack.pop().unwrap())
-}
+    return Some(op_stack.pop().unwrap());
 
-// Calculates the result of an operator applied to two operands
-fn calc(operator: &str, top1: i32, top2: i32) -> i32 {
-    if "+" == operator { top1 + top2}
-    else if "*" == operator { top1 * top2 } 
-    else if "-" == operator { top1 - top2 }
-    else if "/" == operator {
-    if 0 == top1 {
-        panic!("ZeroDivisionError!");
-    } 
-    top1 / top2
-    } else { panic!("Invalid Operator")}
+    // Calculates the result of an operator applied to two operands
+    fn calc(operator: &str, top1: i32, top2: i32) -> i32 {
+        match operator {
+            "+" => top1 + top2,
+            "*" => top1 * top2,
+            "-" => top1 - top2,
+            "/" => {
+                if top1 == 0 {
+                    panic!("ZeroDivisionError!");
+                }
+                top1 / top2
+            }
+            _ => panic!("Invalid Operator"),
+        }
+    }
 }

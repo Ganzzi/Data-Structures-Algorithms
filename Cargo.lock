@@ -17,6 +17,9 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "deque"
 version = "0.1.0"
+dependencies = [
+ "vec",
+]
 
 [[package]]
 name = "getrandom"
@@ -42,6 +45,9 @@ dependencies = [
 [[package]]
 name = "hash_map"
 version = "0.1.0"
+dependencies = [
+ "vec",
+]
 
 [[package]]
 name = "libc"
@@ -52,6 +58,9 @@ checksum = "8e9489c2807c139ffd9c1794f4af0ebe86a828db53ecdc7fea2111d0fed085d1"
 [[package]]
 name = "linked_list"
 version = "0.1.0"
+dependencies = [
+ "vec",
+]
 
 [[package]]
 name = "ppv-lite86"
@@ -74,6 +83,9 @@ dependencies = [
 [[package]]
 name = "queue"
 version = "0.1.0"
+dependencies = [
+ "vec",
+]
 
 [[package]]
 name = "quote"
@@ -119,6 +131,7 @@ name = "recursion"
 version = "0.1.0"
 dependencies = [
  "stack",
+ "vec",
 ]
 
 [[package]]
@@ -138,6 +151,9 @@ dependencies = [
 [[package]]
 name = "stack"
 version = "0.1.0"
+dependencies = [
+ "vec",
+]
 
 [[package]]
 name = "syn"
@@ -155,6 +171,7 @@ name = "tree"
 version = "0.1.0"
 dependencies = [
  "queue",
+ "vec",
 ]
 
 [[package]]
@@ -166,9 +183,6 @@ checksum = "e91b56cd4cadaeb79bbf1a5645f6b4f8dc5bde8834ad5894a8db35fda9efa1fe"
 [[package]]
 name = "vec"
 version = "0.1.0"
-dependencies = [
- "linked_list",
-]
 
 [[package]]
 name = "wasi"

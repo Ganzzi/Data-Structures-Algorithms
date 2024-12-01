@@ -2,7 +2,10 @@
 
 // --- endregion: imports
 
-use crate::{linked_list::LinkedList, linked_stack::{parenthese_checker, LinkedStack}};
+use ::linked_list::parenthese_checker::parenthese_checker;
+use vec::linked_vec;
+
+use crate::{linked_list::LinkedList, linked_stack::LinkedStack};
 
 // --- region: modules
 mod linked_list;
@@ -47,11 +50,10 @@ fn main() {
     }
     println!("Is linked stack empty? {}", linked_stack.is_empty());
 
-
     // Test parenthese_checker
     println!("\n\n***PARENTHESIS CHECKER***");
-    let test_strings = vec!["()", "(())", "()()", "(()", "())"];
-    for string in test_strings {
+    let test_strings = linked_vec!["()", "(())", "()()", "(()", "())"];
+    for string in test_strings.iter() {
         println!(
             "String: {}, Balanced: {}",
             string,

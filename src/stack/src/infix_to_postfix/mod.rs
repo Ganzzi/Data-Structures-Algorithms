@@ -1,27 +1,26 @@
 use crate::{balanced_parenthese::parenthese_checker_2, stack::Stack};
 
-/// Postfix converter
+/// # Postfix converter
 ///
 /// Convert an infix string to a postfix string
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `infix` - The string to be converted (characters seperated by whitespace)
-/// 
+///
 /// # Examples
 ///
 /// ```
-/// use crate::infix_to_postfix::infix_to_postfix;
-/// 
+/// use crate::stack::infix_to_postfix::infix_to_postfix;
+///
 /// let infix = "( 2 + 3 ) * ( 4 + 2 + 1 ) / 5 * 3";
 /// let postfix = infix_to_postfix(infix);
 /// match postfix {
-///     Some(val) => { println!("{infix} -> {val}"); },
+///     Some(val) => assert_eq!(val, String::from("2 3 + 4 2 + 1 + * 5 / 3 * ")),
 ///     None => {
 ///        println!("{infix} isn't a correct infix string");
 ///     },
 /// }
-/// // Output: ( 2 + 3 ) * ( 4 + 2 + 1 ) / 5 * 3 -> 2 3 + 4 2 + 1 + * 5 / 3 * 
 /// ```
 pub fn infix_to_postfix(infix: &str) -> Option<String> {
     if !parenthese_checker_2(infix) {
@@ -43,7 +42,8 @@ pub fn infix_to_postfix(infix: &str) -> Option<String> {
                 top = op_stack.pop().unwrap();
             }
         } else {
-            while !op_stack.is_empty() && (precedence(op_stack.peek().unwrap()) >= precedence(char)) {
+            while !op_stack.is_empty() && (precedence(op_stack.peek().unwrap()) >= precedence(char))
+            {
                 postfix.push(op_stack.pop().unwrap());
             }
             op_stack.push(char);
@@ -60,37 +60,40 @@ pub fn infix_to_postfix(infix: &str) -> Option<String> {
         postfix_str += " ";
     }
 
-    Some(postfix_str)
-}
+    return Some(postfix_str);
 
-fn precedence(op: &str) -> usize {
-    match op {
-        "+" | "-" => 1,
-        "*" | "/" => 2,
-        _ => 0, // For parentheses
+    fn precedence(op: &str) -> usize {
+        match op {
+            "+" | "-" => 1,
+            "*" | "/" => 2,
+            _ => 0, // For parentheses
+        }
     }
 }
 
-/// Postfix Calculator
+/// # Postfix Calculator
 ///
 /// Calculate sum of an integer postfix expression
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `postfix` - The string to be calculated the sum
-/// 
+///
 /// # Examples
 ///
 /// ```
-/// use crate::infix_to_postfix::postfix_eval;
-/// 
+/// use crate::stack::infix_to_postfix::postfix_eval;
+///
 /// let postfix = "2 3 + 4 2 + 1 + * 5 / 3 * ";
 /// let res = postfix_eval(postfix).unwrap();
 /// println!("Postfix Eval = {:?}", res);
+/// assert_eq!(res, 21);
 /// // Output: Res = 21
 /// ```
 pub fn postfix_eval(postfix: &str) -> Option<i32> {
-    if postfix.len() < 5 { return None; }
+    if postfix.len() < 5 {
+        return None;
+    }
 
     let mut op_stack = Stack::new();
 
@@ -106,18 +109,20 @@ pub fn postfix_eval(postfix: &str) -> Option<i32> {
         }
     }
 
-    Some(op_stack.pop().unwrap())
-}
+    return Some(op_stack.pop().unwrap());
 
-fn calc(operator: &str, top1: i32, top2: i32) -> i32 {
-         if "+" == operator { top1 + top2}
-    else if "*" == operator { top1 * top2 } 
-    else if "-" == operator { top2 - top1 }
-    else if "/" == operator {
-        if 0 == top1 {
-            panic!("ZeroDivisionError!");
-        } 
-        top2 / top1 
-    } else { panic!("Invalid Operator")}
+    fn calc(operator: &str, top1: i32, top2: i32) -> i32 {
+        match operator {
+            "+" => top1 + top2,
+            "*" => top1 * top2,
+            "-" => top2 - top1,
+            "/" => {
+                if top1 == 0 {
+                    panic!("ZeroDivisionError!");
+                }
+                top2 / top1
+            }
+            _ => panic!("Invalid Operator"),
+        }
+    }
 }
-

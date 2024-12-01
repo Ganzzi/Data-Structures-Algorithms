@@ -17,15 +17,15 @@ use vec::vec::LinkedVec;
 ///
 /// # Returns
 ///
-/// An optional linked list of vertices in topological order. If the graph has a cycle, the function returns `None`.
+/// An optional linked vector of vertices in topological order. If the graph has a cycle, the function returns `None`.
 ///
 /// # Example
 ///
 /// ```
 /// use graph::topological_sort::topological_sort;
-/// use vec::vec::LinkedVec;
+/// use vec::{vec::LinkedVec, linked_vec};
 ///
-/// let edges = vec![
+/// let edges = linked_vec![
 ///     ("A", "B"),
 ///     ("A", "C"),
 ///     ("B", "C"),
@@ -33,11 +33,11 @@ use vec::vec::LinkedVec;
 ///
 /// let schedule = topological_sort(edges).unwrap();
 ///
-/// assert_eq!(schedule.to_vec(), vec!["C", "B", "A"]);
+/// assert_eq!(schedule, linked_vec!["C", "B", "A"]);
 /// ```
 ///
 pub fn topological_sort<T: Clone + Debug + Display + Eq + Hash>(
-    edges: Vec<(T, T)>,
+    edges: LinkedVec<(T, T)>,
 ) -> Option<LinkedVec<T>> {
     #[derive(Clone, Debug, Eq, Hash, PartialEq)]
     enum VisitStatus {
@@ -52,11 +52,11 @@ pub fn topological_sort<T: Clone + Debug + Display + Eq + Hash>(
     let mut visited: HashMap<T, VisitStatus> = HashMap::with_capacity(graph.vertices_count());
     let mut has_cycle = false;
 
-    for key in graph.get_vertex_keys() {
+    for key in graph.get_vertex_keys().iter() {
         visited.insert(key.clone(), VisitStatus::Unvisited);
     }
 
-    for key in graph.get_vertex_keys() {
+    for key in graph.get_vertex_keys().iter() {
         if *visited.get(&key).unwrap() == VisitStatus::Unvisited {
             visited.insert(key.clone(), VisitStatus::Visiting);
             has_cycle = build_schedule(&graph, key.clone(), &mut schedule, &mut visited, has_cycle);
@@ -72,10 +72,12 @@ pub fn topological_sort<T: Clone + Debug + Display + Eq + Hash>(
         return Some(schedule);
     }
 
-    fn build_graph<T: Clone + Debug + Display + Eq + Hash>(edges: Vec<(T, T)>) -> Graph<T, u8> {
+    fn build_graph<T: Clone + Debug + Display + Eq + Hash>(
+        edges: LinkedVec<(T, T)>,
+    ) -> Graph<T, u8> {
         let mut graph = Graph::new();
-        for (t1, t2) in edges {
-            graph.add_edge(&t1, &t2, 1);
+        for (t1, t2) in edges.iter() {
+            graph.add_edge(&t1.clone(), &t2.clone(), 1);
         }
 
         graph

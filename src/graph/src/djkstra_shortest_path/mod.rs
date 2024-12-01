@@ -3,6 +3,8 @@ use queue::queue::Queue;
 use std::fmt::{Debug, Display};
 use std::hash::Hash;
 use std::ops::Add;
+use vec::linked_vec;
+use vec::vec::LinkedVec;
 
 use crate::graph::{vertex::Vertex, Graph};
 
@@ -24,6 +26,7 @@ use crate::graph::{vertex::Vertex, Graph};
 ///
 /// ```
 /// use crate::graph::{graph::Graph, djkstra_shortest_path::djkstra_shortest_path};
+/// use vec::linked_vec;
 ///
 /// let mut graph = Graph::new();
 ///
@@ -38,7 +41,7 @@ use crate::graph::{vertex::Vertex, Graph};
 /// let result = djkstra_shortest_path(&mut graph, start_vertex.clone(), Some(end_vertex.clone()));
 ///
 /// assert_eq!(result.0.get(&"D").unwrap(), &3);
-/// assert_eq!(result.1.unwrap(), vec!["A", "B", "C", "D"]);
+/// assert_eq!(result.1.unwrap(), linked_vec!["A", "B", "C", "D"]);
 /// ```
 pub fn djkstra_shortest_path<
     T: Clone + Debug + Display + Eq + Hash,
@@ -47,7 +50,7 @@ pub fn djkstra_shortest_path<
     graph: &mut Graph<T, U>,
     start: Vertex<T, U>,
     end: Option<Vertex<T, U>>,
-) -> (HashMap<T, U>, Option<Vec<T>>) {
+) -> (HashMap<T, U>, Option<LinkedVec<T>>) {
     if !graph.contains(&start.get_key()) {
         return (HashMap::new(), None);
     }
@@ -95,7 +98,7 @@ pub fn djkstra_shortest_path<
 
     match end {
         Some(end) => {
-            let mut path = vec![];
+            let mut path = linked_vec![];
             let mut curr = Some(end.get_key().clone());
             while let Some(key) = curr {
                 path.push(key.clone());

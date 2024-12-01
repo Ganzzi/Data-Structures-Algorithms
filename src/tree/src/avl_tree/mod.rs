@@ -1,14 +1,14 @@
 use std::cmp::Ordering::*;
+use std::fmt::Debug;
 use std::mem::replace;
 
 use queue::queue::Queue;
 
-#[derive(Debug, PartialEq)]
-pub enum AVLTree<T> {
-    Null,
-    Tree(Box<AVLNode<T>>),
-}
-
+/// Represents a node in an AVL tree.
+///
+/// # Generic Parameters
+///
+/// * `T` - Type of elements stored in the AVL tree.
 #[derive(Debug, PartialEq)]
 pub struct AVLNode<T> {
     key: T,
@@ -17,11 +17,68 @@ pub struct AVLNode<T> {
     bfactor: i8,
 }
 
-impl<T: Ord> AVLTree<T> {
+/// Represents an AVL tree.
+///
+/// # Generic Parameters
+///
+/// * `T` - Type of elements stored in the AVL tree.
+///
+/// # Examples
+///
+/// ```
+/// use crate::tree::avl_tree::AVLTree;
+///
+/// let mut tree = AVLTree::new();
+/// tree.insert(10);
+/// tree.insert(5);
+/// tree.insert(15);
+///
+/// assert_eq!(tree.size(), 3);
+/// assert_eq!(tree.leaf_size(), 2);
+/// assert_eq!(tree.non_leaf_size(), 1);
+/// assert_eq!(tree.depth(), 2);
+/// assert_eq!(tree.min(), Some(&5));
+/// assert_eq!(tree.max(), Some(&15));
+/// assert!(tree.contains(&10));
+/// assert!(!tree.contains(&20));
+/// ```
+#[derive(Debug, PartialEq)]
+pub enum AVLTree<T> {
+    Null,
+    Tree(Box<AVLNode<T>>),
+}
+
+impl<T: Ord + Debug + Clone> AVLTree<T> {
+    /// Creates a new empty AVL tree.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    ///
+    /// let tree: AVLTree<i32> = AVLTree::new();
+    /// ```
     pub fn new() -> Self {
         Self::Null
     }
 
+    /// Checks if the AVL tree is balanced.
+    ///
+    /// # Returns
+    ///
+    /// A boolean value indicating whether the AVL tree is balanced.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    ///
+    /// let mut tree = AVLTree::new();
+    /// tree.insert(10);
+    /// tree.insert(5);
+    /// tree.insert(15);
+    /// assert!(tree.is_balanced());
+    /// ```
     pub fn is_balanced(&self) -> bool {
         fn check_balance<T: Ord>(tree: &AVLTree<T>) -> (bool, i8) {
             match tree {
@@ -39,6 +96,28 @@ impl<T: Ord> AVLTree<T> {
         check_balance(self).0
     }
 
+    /// Inserts a key into the AVL tree.
+    ///
+    /// # Arguments
+    ///
+    /// * `key` - The key to be inserted.
+    ///
+    /// # Returns
+    ///
+    /// A tuple containing two boolean values:
+    /// - The first boolean indicates whether the key was inserted.
+    /// - The second boolean indicates whether the height of the tree increased.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    ///
+    /// let mut tree = AVLTree::new();
+    /// tree.insert(10);
+    /// tree.insert(5);
+    /// tree.insert(15);
+    /// ```
     pub fn insert(&mut self, key: T) -> (bool, bool) {
         let inserted_increased_tupple = match self {
             Self::Null => {
@@ -198,6 +277,23 @@ impl<T: Ord> AVLTree<T> {
         }
     }
 
+    /// Returns the size of the AVL tree.
+    ///
+    /// # Returns
+    ///
+    /// The number of nodes in the AVL tree.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    ///
+    /// let mut tree = AVLTree::new();
+    /// tree.insert(10);
+    /// tree.insert(5);
+    /// tree.insert(15);
+    /// assert_eq!(tree.size(), 3);
+    /// ```
     pub fn size(&self) -> usize {
         match self {
             AVLTree::Null => 0,
@@ -205,6 +301,23 @@ impl<T: Ord> AVLTree<T> {
         }
     }
 
+    /// Returns the number of leaf nodes in the AVL tree.
+    ///
+    /// # Returns
+    ///
+    /// The number of leaf nodes in the AVL tree.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    ///
+    /// let mut tree = AVLTree::new();
+    /// tree.insert(10);
+    /// tree.insert(5);
+    /// tree.insert(15);
+    /// assert_eq!(tree.leaf_size(), 2);
+    /// ```
     pub fn leaf_size(&self) -> usize {
         match self {
             AVLTree::Null => 0,
@@ -227,10 +340,44 @@ impl<T: Ord> AVLTree<T> {
         }
     }
 
+    /// Returns the number of non-leaf nodes in the AVL tree.
+    ///
+    /// # Returns
+    ///
+    /// The number of non-leaf nodes in the AVL tree.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    ///
+    /// let mut tree = AVLTree::new();
+    /// tree.insert(10);
+    /// tree.insert(5);
+    /// tree.insert(15);
+    /// assert_eq!(tree.non_leaf_size(), 1);
+    /// ```
     pub fn non_leaf_size(&self) -> usize {
         self.size() - self.leaf_size()
     }
 
+    /// Returns the depth of the AVL tree.
+    ///
+    /// # Returns
+    ///
+    /// The depth of the AVL tree.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    ///
+    /// let mut tree = AVLTree::new();
+    /// tree.insert(10);
+    /// tree.insert(5);
+    /// tree.insert(15);
+    /// assert_eq!(tree.depth(), 2);
+    /// ```
     pub fn depth(&self) -> usize {
         match self {
             AVLTree::Null => 0,
@@ -238,6 +385,20 @@ impl<T: Ord> AVLTree<T> {
         }
     }
 
+    /// Checks if the AVL tree is empty.
+    ///
+    /// # Returns
+    ///
+    /// A boolean value indicating whether the AVL tree is empty.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    ///
+    /// let tree: AVLTree<i32> = AVLTree::new();
+    /// assert!(tree.is_empty());
+    /// ```
     pub fn is_empty(&self) -> bool {
         match self {
             AVLTree::Null => true,
@@ -245,6 +406,23 @@ impl<T: Ord> AVLTree<T> {
         }
     }
 
+    /// Returns the minimum key in the AVL tree.
+    ///
+    /// # Returns
+    ///
+    /// An option containing a reference to the minimum key, or None if the tree is empty.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    ///
+    /// let mut tree = AVLTree::new();
+    /// tree.insert(10);
+    /// tree.insert(5);
+    /// tree.insert(15);
+    /// assert_eq!(tree.min(), Some(&5));
+    /// ```
     pub fn min(&self) -> Option<&T> {
         match self {
             AVLTree::Null => None,
@@ -258,6 +436,23 @@ impl<T: Ord> AVLTree<T> {
         }
     }
 
+    /// Returns the maximum key in the AVL tree.
+    ///
+    /// # Returns
+    ///
+    /// An option containing a reference to the maximum key, or None if the tree is empty.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    ///
+    /// let mut tree = AVLTree::new();
+    /// tree.insert(10);
+    /// tree.insert(5);
+    /// tree.insert(15);
+    /// assert_eq!(tree.max(), Some(&15));
+    /// ```
     pub fn max(&self) -> Option<&T> {
         match self {
             AVLTree::Null => None,
@@ -271,6 +466,30 @@ impl<T: Ord> AVLTree<T> {
         }
     }
 
+    /// Checks if the AVL tree contains the specified key.
+    ///
+    /// # Arguments
+    ///
+    /// * `key` - The key to check for.
+    ///
+    /// # Returns
+    ///
+    /// A boolean value indicating whether the AVL tree contains the key.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    ///
+    /// let mut tree = AVLTree::new();
+    /// tree.insert(10);
+    /// tree.insert(5);
+    /// tree.insert(15);
+    /// assert!(tree.contains(&10));
+    /// assert!(tree.contains(&5));
+    /// assert!(tree.contains(&15));
+    /// assert!(!tree.contains(&20));
+    /// ```
     pub fn contains(&self, key: &T) -> bool {
         match self {
             AVLTree::Null => false,
@@ -282,6 +501,27 @@ impl<T: Ord> AVLTree<T> {
         }
     }
 
+    /// Performs a pre-order traversal of the AVL tree.
+    ///
+    /// # Arguments
+    ///
+    /// * `f` - A mutable reference to a function to be called on each node's key.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    /// use vec::linked_vec;
+    ///
+    /// let mut tree = AVLTree::new();
+    /// tree.insert(10);
+    /// tree.insert(5);
+    /// tree.insert(15);
+    ///
+    /// let mut keys = linked_vec![];
+    /// tree.pre_order(&mut |key| keys.push(*key));
+    /// assert_eq!(keys, linked_vec![10, 5, 15]);
+    /// ```
     pub fn pre_order(&self, f: &mut dyn FnMut(&T)) {
         match self {
             AVLTree::Null => (),
@@ -293,6 +533,27 @@ impl<T: Ord> AVLTree<T> {
         }
     }
 
+    /// Performs an in-order traversal of the AVL tree.
+    ///
+    /// # Arguments
+    ///
+    /// * `f` - A mutable reference to a function to be called on each node's key.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    /// use vec::linked_vec;
+    ///
+    /// let mut tree = AVLTree::new();
+    /// tree.insert(10);
+    /// tree.insert(5);
+    /// tree.insert(15);
+    ///
+    /// let mut keys = linked_vec![];
+    /// tree.in_order(&mut |key| keys.push(*key));
+    /// assert_eq!(keys, linked_vec![5, 10, 15]);
+    /// ```
     pub fn in_order(&self, f: &mut dyn FnMut(&T)) {
         match self {
             AVLTree::Null => (),
@@ -304,6 +565,27 @@ impl<T: Ord> AVLTree<T> {
         }
     }
 
+    /// Performs a post-order traversal of the AVL tree.
+    ///
+    /// # Arguments
+    ///
+    /// * `f` - A mutable reference to a function to be called on each node's key.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    /// use vec::linked_vec;
+    ///
+    /// let mut tree = AVLTree::new();
+    /// tree.insert(10);
+    /// tree.insert(5);
+    /// tree.insert(15);
+    ///
+    /// let mut keys = linked_vec![];
+    /// tree.post_order(&mut |key| keys.push(*key));
+    /// assert_eq!(keys, linked_vec![5, 15, 10]);
+    /// ```
     pub fn post_order(&self, f: &mut dyn FnMut(&T)) {
         match self {
             AVLTree::Null => (),
@@ -315,6 +597,27 @@ impl<T: Ord> AVLTree<T> {
         }
     }
 
+    /// Performs a level-order traversal of the AVL tree.
+    ///
+    /// # Arguments
+    ///
+    /// * `f` - A mutable reference to a function to be called on each node's key.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::tree::avl_tree::AVLTree;
+    /// use vec::linked_vec;
+    ///
+    /// let mut tree = AVLTree::new();
+    /// tree.insert(10);
+    /// tree.insert(5);
+    /// tree.insert(15);
+    ///
+    /// let mut keys = linked_vec![];
+    /// tree.level_order(&mut |key| keys.push(*key));
+    /// assert_eq!(keys, linked_vec![10, 5, 15]);
+    /// ```
     pub fn level_order(&self, f: &mut dyn FnMut(&T)) {
         if self.is_empty() {
             return;

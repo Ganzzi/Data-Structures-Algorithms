@@ -1,3 +1,7 @@
+use std::fmt::Debug;
+
+use vec::vec::LinkedVec;
+
 /// A generic deque (double-ended queue) data structure implemented using a vector.
 ///
 /// # Generic Parameters
@@ -12,7 +16,7 @@
 /// # Examples
 ///
 /// ```
-/// use deque::Deque;
+/// use deque::deque::Deque;
 ///
 /// let mut deque: Deque<i32> = Deque::new(5);
 ///
@@ -30,10 +34,10 @@
 #[derive(Debug)]
 pub struct Deque<T> {
     cap: usize,
-    data: Vec<T>
+    data: LinkedVec<T>,
 }
 
-impl<T> Deque<T> {
+impl<T: Debug + Clone + PartialEq> Deque<T> {
     /// Creates a new empty deque with the given maximum capacity.
     ///
     /// # Arguments
@@ -44,7 +48,10 @@ impl<T> Deque<T> {
     ///
     /// A new empty deque with the specified capacity.
     pub fn new(size: usize) -> Self {
-        Deque { cap: size, data: Vec::with_capacity(size) }
+        Deque {
+            cap: size,
+            data: LinkedVec::new(),
+        }
     }
 
     /// Adds an element to the front of the deque.
@@ -100,9 +107,9 @@ impl<T> Deque<T> {
     ///
     /// An optional value containing the removed element, or `None` if the deque is empty.
     pub fn remove_rear(&mut self) -> Option<T> {
-        match self.data.last() {
-            Some(_) => Some(self.data.remove(0)),
-            None => None
+        match self.data.peek() {
+            Some(_) => self.data.remove(0),
+            None => None,
         }
     }
 
@@ -134,8 +141,8 @@ impl<T> Deque<T> {
     }
 
     /// Clears the deque, removing all elements.
-    pub fn clear(&mut self){
-        self.data = Vec::with_capacity(self.cap);
+    pub fn clear(&mut self) {
+        self.data = LinkedVec::new();
     }
 
     /// Returns an iterator over the elements of the deque.
@@ -164,5 +171,4 @@ impl<T> Deque<T> {
     pub fn into_iter(self) -> impl Iterator<Item = T> {
         self.data.into_iter()
     }
-
 }

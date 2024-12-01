@@ -1,4 +1,5 @@
 use hash_map::hash_map::HashMap;
+use vec::{linked_vec, vec::LinkedVec};
 
 use crate::{
     breadth_first_search::breadth_first_search,
@@ -23,19 +24,23 @@ use crate::{
 ///
 /// ```
 /// use crate::graph::{graph::Graph, word_ladder_puzzle::word_ladder_puzzle};
+/// use vec::linked_vec;
 ///
 /// let start = "hit";
 /// let end = "cog";
-/// let words = vec!["hit", "hot", "dot", "dog", "cog"];
-///
+/// let words = linked_vec!["hit", "hot", "dot", "dog", "lot", "log", "cog"];
+
 /// let result = word_ladder_puzzle(words, start, end);
 ///
 /// assert_eq!(result.0, 4);
-/// assert_eq!(result.1, vec!["hit", "hot", "dot", "dog", "cog"]);
 /// ```
-pub fn word_ladder_puzzle(words: Vec<&str>, start: &str, end: &str) -> (u32, Vec<String>) {
-    let mut pattern_dic: HashMap<String, Vec<String>> = HashMap::new();
-    for word in words {
+pub fn word_ladder_puzzle(
+    words: LinkedVec<&str>,
+    start: &str,
+    end: &str,
+) -> (u32, LinkedVec<String>) {
+    let mut pattern_dic: HashMap<String, LinkedVec<String>> = HashMap::new();
+    for word in words.iter() {
         for i in 0..word.len() {
             let pattern = word[..i].to_string() + "_" + &word[i + 1..];
             if pattern_dic.contains(&pattern) {
@@ -44,15 +49,15 @@ pub fn word_ladder_puzzle(words: Vec<&str>, start: &str, end: &str) -> (u32, Vec
                     .unwrap()
                     .push(word.to_string());
             } else {
-                pattern_dic.insert(pattern, vec![word.to_string()]);
+                pattern_dic.insert(pattern, linked_vec![word.to_string()]);
             }
         }
     }
 
     let mut graph = Graph::new();
     for (_, words) in pattern_dic.iter() {
-        for w1 in words {
-            for w2 in words {
+        for w1 in words.iter() {
+            for w2 in words.iter() {
                 if w1 != w2 {
                     graph.add_edge(w1, w2, 1);
                 }

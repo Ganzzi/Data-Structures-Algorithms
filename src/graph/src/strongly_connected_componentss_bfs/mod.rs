@@ -3,6 +3,7 @@ use queue::queue::Queue;
 use std::fmt::{Debug, Display};
 use std::hash::Hash;
 use std::ops::Add;
+use vec::vec::LinkedVec;
 
 use crate::graph::{vertex::Vertex, Graph};
 
@@ -17,21 +18,22 @@ use crate::graph::{vertex::Vertex, Graph};
 ///
 /// # Returns
 ///
-/// A vector of strongly connected components.
+/// A Linked Vector of strongly connected components.
 ///
 /// # Example
 ///
 /// ```
 /// use crate::graph::{graph::Graph, strongly_connected_componentss_bfs::strongly_connected_components_bfs};
+/// use vec::linked_vec;
 ///
 /// let mut graph = Graph::new();
 ///
-/// let states_and_cities = vec![
-///     ("NY", vec!["Albany", "Buffalo", "Rochester"], 36),
-///     ("CA", vec!["Sacramento", "Los Angeles", "San Francisco"], 39),
-///     ("TX", vec!["Austin", "Houston", "Dallas"], 48),
-///     ("FL", vec!["Tallahassee", "Miami", "Orlando"], 12),
-///     ("IL", vec!["Springfield", "Chicago", "Naperville"], 17),
+/// let states_and_cities = linked_vec![
+///     ("NY", linked_vec!["Albany", "Buffalo", "Rochester"], 36),
+///     ("CA", linked_vec!["Sacramento", "Los Angeles", "San Francisco"], 39),
+///     ("TX", linked_vec!["Austin", "Houston", "Dallas"], 48),
+///     ("FL", linked_vec!["Tallahassee", "Miami", "Orlando"], 12),
+///     ("IL", linked_vec!["Springfield", "Chicago", "Naperville"], 17),
 /// ];
 ///
 /// states_and_cities
@@ -68,21 +70,21 @@ pub fn strongly_connected_components_bfs<
     U: Debug + Default + Clone + PartialEq + Add<Output = U>,
 >(
     graph: &Graph<T, U>,
-) -> Vec<Vec<Vertex<T, U>>> {
+) -> LinkedVec<LinkedVec<Vertex<T, U>>> {
     let mut visited: HashMap<T, bool> = HashMap::new();
     let mut queue: Queue<Vertex<T, U>> = Queue::new(graph.vertices_count());
-    let mut result: Vec<Vec<Vertex<T, U>>> = Vec::new();
+    let mut result: LinkedVec<LinkedVec<Vertex<T, U>>> = LinkedVec::new();
 
-    for key in graph.get_vertex_keys() {
+    for key in graph.get_vertex_keys().iter() {
         visited.insert(key.clone(), false);
     }
 
-    for key in graph.get_vertex_keys() {
+    for key in graph.get_vertex_keys().iter() {
         if *visited.get(&key).unwrap() {
             continue;
         }
 
-        let mut component: Vec<Vertex<T, U>> = Vec::new();
+        let mut component: LinkedVec<Vertex<T, U>> = LinkedVec::new();
         let vertex = graph.get_vertex(&key).unwrap().clone();
         let _ = queue.enqueue(vertex.clone());
         visited.insert(vertex.get_key().clone(), true);

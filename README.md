@@ -1,20 +1,24 @@
 # Rust Data Structures and Algorithms
 
-This Rust project aims to implement various data structures and algorithms to help me understand and practice fundamental concepts in computer science. Currently, the implemented data structures include:
+This Rust project aims to implement various data structures and algorithms to help me understand and practice fundamental concepts in computer science. Currently, the implemented data structures and algorithms include:
 
 1. Stack:
+   - Stack data type: A generic stack data structure implemented using a vector.
    - Parentheses Checker: Checks whether a given string of parentheses is balanced.
    - Number Converter: Converts numbers between different numeral systems (e.g., binary, decimal, hexadecimal).
    - Infix to Postfix Conversion & Evaluation: Converts infix expressions to postfix notation & Evaluates postfix expressions.
    - Infix to Prefix Conversion & Evaluation: Converts infix expressions to prefix notation & Evaluates prefix expressions.
    
 2. Queue:
+   - Queue data type: A generic queue data structure implemented using a vector.
    - Hot Potato Game: Simulates the "Hot Potato" game where players pass a potato around in a circle.
 
 3. Deque: 
+   - Deque data type: A generic double-ended queue data structure implemented using a vector.
    - Palindrome checker: Checks if a given string is a palindrome (A palindrome is a word, phrase, number, or other sequence of characters that reads the same forward and backward.)
 
 4. Linked List:
+   - Linked List: A generic linear data structure where each node contains a value and a reference to the next node.
    - Linked Stack: A stack data structure implemented using a linked list. It follows the Last-In-First-Out (LIFO) principle and offers dynamic memory allocation. Linked stacks are ideal for managing data with unpredictable sizes and provide efficient push and pop operations.
    - Parentheses Checker: Checks whether a given string of parentheses is balanced using linked stack.
 
@@ -22,6 +26,10 @@ This Rust project aims to implement various data structures and algorithms to he
    - Linked Vector: A linked vector is a dynamic data structure that combines the flexibility of a linked list with the random access capabilities of an array. It provides efficient insertion, removal, and access operations, making it suitable for scenarios where the size of the data fluctuates frequently. Linked vectors offer a balance between flexibility and performance, making them ideal for applications with unpredictable data sizes.
 
 6. Recursion: 
+   * Recursion: Involves a function calling itself to solve a problem, it breaks the problem into small instances and includes a base case to terminate the recursion.
+   * Tail Recursion: A special form of recursion that processes the current result of operation as a parameter for the next recursive call, ensure reducion of memory consumption on the stack.
+   * Dynamic Programming: A technique used to solve problems by breaking them down into simpler subproblems and storing the results of these subproblems to avoid redundant computations. It can be implemented using either a bottom-up (iterative) or top-down (memorization) approach.
+
    - Sum of number: Calculate the sum of numbers using recursion and tail recursion approach.
    - Number to string: Convert a number to a string representation in a given base.
    - Tower of hanoi puzzle: simulate the "Tower of hanoi" puzzle that need to move a number of disks from a peg to another one.
@@ -62,7 +70,7 @@ This Rust project aims to implement various data structures and algorithms to he
    - Binary Heap: A Binary Heap is essentially a binary tree that allows queuing and dequeuing, make it ideal for efficient scheduling system. It stores data in a linear data structure. In this implementation, min-heap is choosen to store data with the smallest is at the top.
    - AVL - Balanced Binary Search Tree: An AVL Tree is a self-balancing binary search tree where the balance factor (the difference in heights between the left and right subtree) is at most once. It automatically rebalances during insertion.
 
-8. Graph
+10. Graph
    - Breadth-first search: An algorithm to find the shortest path between two vertices in a graph. It travels the graph level by level and use a queue to keep track of the vertices to visit next.
    - Word Ladder Puzzle: A game that uses breadth-first search approach to find the shortest path between two words in a list of words. It use graph to represent the words and their connections to other words that are determined by the the difference by only one letter.
    - Knight's Tour Puzzle: A mathematical problem involving a knight is placed on any square of the board and move to every square on the board ensuring visiting each one exactly once. It is a specific case of the depth-first search algorithm, which aims to create the deepest possible tree.

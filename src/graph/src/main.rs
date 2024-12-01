@@ -6,6 +6,7 @@ use graph::{
     strongly_connected_componentss_dfs::strongly_connected_components_dfs,
     topological_sort::topological_sort, word_ladder_puzzle::word_ladder_puzzle,
 };
+use vec::linked_vec;
 
 fn main() {
     test_graph();
@@ -84,7 +85,7 @@ fn test_word_ladder_puzzle_find_shortest_distance_with_bfs() {
 
     let start = "hit";
     let end = "cog";
-    let words = vec!["hit", "hot", "dot", "dog", "lot", "log", "cog"];
+    let words = linked_vec!["hit", "hot", "dot", "dog", "lot", "log", "cog"];
 
     let distance = word_ladder_puzzle(words, start, end);
     println!("Path: {:?}", distance.1);
@@ -138,7 +139,7 @@ fn test_depth_first_search() {
 fn test_topological_sort() {
     println!("\n\n***TOPOLOGICAL SORT***");
 
-    let edges = vec![
+    let edges = linked_vec![
         ("Mix", "3/4 cup of milk"),
         ("Mix", "1 egg"),
         ("Mix", "1 tablespoon olive oil"),
@@ -162,12 +163,16 @@ fn test_strongly_connected_components_bfs() {
 
     let mut graph = Graph::new();
 
-    let courses_and_subjects = vec![
-        ("Math", vec!["Algebra", "Calculus", "Geometry"], 101),
-        ("Science", vec!["Physics", "Chemistry", "Biology"], 102),
-        ("Literature", vec!["Poetry", "Prose", "Drama"], 103),
-        ("History", vec!["Ancient", "Medieval", "Modern"], 104),
-        ("Art", vec!["Painting", "Sculpture", "Music"], 105),
+    let courses_and_subjects = linked_vec![
+        ("Math", linked_vec!["Algebra", "Calculus", "Geometry"], 101),
+        (
+            "Science",
+            linked_vec!["Physics", "Chemistry", "Biology"],
+            102
+        ),
+        ("Literature", linked_vec!["Poetry", "Prose", "Drama"], 103),
+        ("History", linked_vec!["Ancient", "Medieval", "Modern"], 104),
+        ("Art", linked_vec!["Painting", "Sculpture", "Music"], 105),
     ];
 
     courses_and_subjects
@@ -205,12 +210,20 @@ fn test_strongly_connected_components_dfs() {
 
     let mut graph = Graph::new();
 
-    let states_and_cities = vec![
-        ("NY", vec!["Albany", "Buffalo", "Rochester"], 36),
-        ("CA", vec!["Sacramento", "Los Angeles", "San Francisco"], 39),
-        ("TX", vec!["Austin", "Houston", "Dallas"], 48),
-        ("FL", vec!["Tallahassee", "Miami", "Orlando"], 12),
-        ("IL", vec!["Springfield", "Chicago", "Naperville"], 17),
+    let states_and_cities = linked_vec![
+        ("NY", linked_vec!["Albany", "Buffalo", "Rochester"], 36),
+        (
+            "CA",
+            linked_vec!["Sacramento", "Los Angeles", "San Francisco"],
+            39
+        ),
+        ("TX", linked_vec!["Austin", "Houston", "Dallas"], 48),
+        ("FL", linked_vec!["Tallahassee", "Miami", "Orlando"], 12),
+        (
+            "IL",
+            linked_vec!["Springfield", "Chicago", "Naperville"],
+            17
+        ),
     ];
 
     states_and_cities

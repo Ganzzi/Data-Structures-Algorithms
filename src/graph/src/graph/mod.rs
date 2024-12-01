@@ -3,11 +3,44 @@ use std::{
     fmt::{Debug, Display},
     hash::Hash,
 };
+use vec::vec::LinkedVec;
 
 use vertex::Vertex;
 
 pub mod vertex;
 
+/// A struct representing a graph with vertices and edges.
+///
+/// # Fields
+///
+/// * `vertices_count` - The number of vertices in the graph.
+/// * `edges_count` - The number of edges in the graph.
+/// * `vertices` - A hashmap containing the vertices of the graph, where the key is of type `T` and the value is a `Vertex<T, U>`.
+///
+/// # Type Parameters
+///
+/// * `T` - The type of the keys of the vertices.
+/// * `U` - The type of the weights of the edges.
+///
+/// # Examples
+///
+/// ```
+/// use crate::graph::graph::Graph;
+///
+/// let mut graph = Graph::new();
+///
+/// graph.add_vertex(&"A");
+/// graph.add_vertex(&"B");
+/// graph.add_vertex(&"C");
+///
+/// graph.add_edge(&"A", &"B", 1);
+///
+/// assert_eq!(graph.vertices_count(), 3);
+/// assert_eq!(graph.edges_count(), 1);
+/// assert_eq!(graph.is_adjacent(&"A", &"B"), true);
+/// assert_eq!(graph.is_adjacent(&"A", &"C"), false);
+///
+/// ```
 #[derive(Debug)]
 pub struct Graph<T, U>
 where
@@ -122,7 +155,7 @@ where
     /// # Returns
     ///
     /// A vector of keys of all vertices in the graph.
-    pub fn get_vertex_keys(&self) -> Vec<T> {
+    pub fn get_vertex_keys(&self) -> LinkedVec<T> {
         self.vertices.iter().map(|(k, _)| k.clone()).collect()
     }
 
@@ -141,7 +174,7 @@ where
 
             self.edges_count -= vertex.get_neighbors().len();
 
-            for vtx_key in self.get_vertex_keys() {
+            for vtx_key in self.get_vertex_keys().iter() {
                 if let Some(vtx) = self.vertices.get_mut(&vtx_key) {
                     if vtx.is_adjacent(key) {
                         if let Some(_) = vtx.remove_neighbor(key) {

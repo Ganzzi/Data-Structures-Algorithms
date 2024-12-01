@@ -1,6 +1,7 @@
 use queue::queue::Queue;
+use vec::vec::LinkedVec;
 
-/// Hot Potato game
+/// # Hot Potato game
 ///
 /// Simulates the "Hot Potato" game where a potato is passed around in a circle
 /// and whoever is holding the potato when the game ends is out.
@@ -17,16 +18,17 @@ use queue::queue::Queue;
 /// # Example
 ///
 /// ```
-/// use hot_potato_game::hot_potato;
+/// use queue::hot_potato::hot_potato;
+/// use vec::linked_vec;
 ///
-/// let names = vec!["Alice", "Bob", "Charlie", "David", "Emma"];
+/// let names = linked_vec!["Alice", "Bob", "Charlie", "David", "Emma"];
 /// let winner = hot_potato(names, 3);
 /// assert_eq!(winner, "Charlie");
 /// ```
-pub fn hot_potato(names: Vec<&str>, num: usize) -> &str {
+pub fn hot_potato(names: LinkedVec<&str>, num: usize) -> &str {
     let mut queue = Queue::new(names.len());
 
-    for name in names.iter().rev() {
+    for name in names.reverse().iter() {
         let _ = queue.enqueue(*name);
     }
 

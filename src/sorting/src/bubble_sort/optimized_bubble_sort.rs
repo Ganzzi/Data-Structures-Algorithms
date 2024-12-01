@@ -16,7 +16,7 @@
 /// ```
 /// let mut nums = [4, 2, 3, 1];
 ///
-/// crate::sorting::bubble_sort::optimized_bubble_sort(&mut nums);
+/// crate::sorting::bubble_sort::optimized_bubble_sort::optimized_bubble_sort(&mut nums);
 ///
 /// assert_eq!(nums, [1, 2, 3, 4]);
 /// ```

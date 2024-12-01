@@ -3,6 +3,8 @@ use queue::queue::Queue;
 use std::fmt::{Debug, Display};
 use std::hash::Hash;
 use std::ops::Add;
+use vec::linked_vec;
+use vec::vec::LinkedVec;
 
 use crate::graph::{vertex::Vertex, Graph};
 
@@ -47,12 +49,12 @@ pub fn breadth_first_search<
     graph: &mut Graph<T, U>,
     start: Vertex<T, U>,
     end: Vertex<T, U>,
-) -> (U, Vec<T>) {
+) -> (U, LinkedVec<T>) {
     if !graph.contains(start.get_key()) {
-        return (U::default(), vec![]);
+        return (U::default(), linked_vec![]);
     }
     if !graph.contains(end.get_key()) {
-        return (U::default(), vec![]);
+        return (U::default(), linked_vec![]);
     }
 
     let mut predecessors: HashMap<T, Option<T>> = HashMap::with_capacity(graph.vertices_count());
@@ -72,7 +74,7 @@ pub fn breadth_first_search<
             if vertex_neighbor.get_key() == start.get_key() {
                 continue;
             } else if vertex_neighbor.get_key() == end.get_key() {
-                let mut path = vec![vertex_neighbor.get_key().clone()];
+                let mut path = linked_vec![vertex_neighbor.get_key().clone()];
                 let mut current_vertex = Some(vertex.get_key().clone());
                 while let Some(key) = current_vertex {
                     path.push(key.clone());
@@ -105,5 +107,5 @@ pub fn breadth_first_search<
         }
     }
 
-    (U::default(), vec![])
+    (U::default(), linked_vec![])
 }

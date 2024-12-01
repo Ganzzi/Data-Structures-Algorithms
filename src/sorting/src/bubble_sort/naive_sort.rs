@@ -15,7 +15,7 @@
 /// ```
 /// let mut nums = [4, 2, 1, 3];
 ///
-/// crate::sorting::bubble_sort::naive_sort(&mut nums);
+/// crate::sorting::bubble_sort::naive_sort::naive_sort(&mut nums);
 ///
 /// assert_eq!(nums, [1, 2, 3, 4]);
 /// ```

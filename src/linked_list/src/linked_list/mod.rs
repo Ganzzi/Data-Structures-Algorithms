@@ -18,6 +18,29 @@ impl<T> Node<T> {
 }
 
 /// Represents a singly linked list.
+///
+/// # Generic Parameters
+///
+/// * `T` - Type of elements stored in the linked list.
+///
+/// # Fields
+///
+/// * `size` - The size of the linked list.
+/// * `head` - Pointer to the head node of the linked list.
+///
+/// # Examples
+///
+/// ```
+/// use crate::linked_list::linked_list::LinkedList;
+///
+/// let mut list: LinkedList<i32> = LinkedList::new();
+/// list.push(1);
+/// list.push(2);
+/// let last = list.pop();
+///
+/// assert_eq!(list.size(), 1);
+/// assert_eq!(last, Some(2));
+/// ```
 pub struct LinkedList<T> {
     /// The size of the linked list.
     size: usize,
@@ -35,13 +58,16 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use linked_list::LinkedList;
+    /// use crate::linked_list::linked_list::LinkedList;
     ///
     /// let list: LinkedList<i32> = LinkedList::new();
     /// assert_eq!(list.size(), 0);
     /// ```
     pub fn new() -> Self {
-        LinkedList { size: 0, head: None }
+        LinkedList {
+            size: 0,
+            head: None,
+        }
     }
 
     /// Pushes an element onto the front of the linked list.
@@ -53,9 +79,9 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use linked_list::LinkedList;
+    /// use crate::linked_list::linked_list::LinkedList;
     ///
-    /// let mut list = LinkedList::new(0);
+    /// let mut list = LinkedList::new();
     /// list.push(1);
     /// assert_eq!(list.peek(), Some(&1));
     /// ```
@@ -74,9 +100,9 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use linked_list::LinkedList;
+    /// use crate::linked_list::linked_list::LinkedList;
     ///
-    /// let mut list = LinkedList::new(0);
+    /// let mut list = LinkedList::new();
     /// list.push(1);
     /// assert_eq!(list.pop(), Some(1));
     /// assert_eq!(list.is_empty(), true);
@@ -98,9 +124,9 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use linked_list::LinkedList;
+    /// use crate::linked_list::linked_list::LinkedList;
     ///
-    /// let mut list = LinkedList::new(0);
+    /// let mut list = LinkedList::new();
     /// list.push(1);
     /// assert_eq!(list.peek(), Some(&1));
     /// ```
@@ -117,9 +143,9 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use linked_list::LinkedList;
+    /// use crate::linked_list::linked_list::LinkedList;
     ///
-    /// let mut list = LinkedList::new(0);
+    /// let mut list = LinkedList::new();
     /// list.push(1);
     /// if let Some(data) = list.peek_mut() {
     ///     *data = 2;
@@ -139,9 +165,9 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use linked_list::LinkedList;
+    /// use crate::linked_list::linked_list::LinkedList;
     ///
-    /// let mut list = LinkedList::new(0);
+    /// let mut list = LinkedList::new();
     /// assert_eq!(list.is_empty(), true);
     /// list.push(1);
     /// assert_eq!(list.is_empty(), false);
@@ -159,9 +185,9 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use linked_list::LinkedList;
+    /// use crate::linked_list::linked_list::LinkedList;
     ///
-    /// let mut list = LinkedList::new(0);
+    /// let mut list = LinkedList::new();
     /// assert_eq!(list.size(), 0);
     /// list.push(1);
     /// assert_eq!(list.size(), 1);
@@ -175,9 +201,9 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use linked_list::LinkedList;
+    /// use crate::linked_list::linked_list::LinkedList;
     ///
-    /// let mut list = LinkedList::new(0);
+    /// let mut list = LinkedList::new();
     /// list.push(1);
     /// list.clear();
     /// assert_eq!(list.is_empty(), true);
@@ -196,9 +222,9 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use linked_list::LinkedList;
+    /// use crate::linked_list::linked_list::LinkedList;
     ///
-    /// let mut list = LinkedList::new(0);
+    /// let mut list = LinkedList::new();
     /// list.push(1);
     /// list.push(2);
     /// let mut iter = list.iter();
@@ -221,9 +247,9 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use linked_list::LinkedList;
+    /// use crate::linked_list::linked_list::LinkedList;
     ///
-    /// let mut list = LinkedList::new(0);
+    /// let mut list = LinkedList::new();
     /// list.push(1);
     /// list.push(2);
     /// let mut iter = list.iter_mut();
@@ -248,9 +274,9 @@ impl<T> LinkedList<T> {
     /// # Examples
     ///
     /// ```
-    /// use linked_list::LinkedList;
+    /// use crate::linked_list::linked_list::LinkedList;
     ///
-    /// let mut list = LinkedList::new(0);
+    /// let mut list = LinkedList::new();
     /// list.push(1);
     /// list.push(2);
     /// let mut iter = list.into_iter();
