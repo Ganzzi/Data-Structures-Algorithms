@@ -80,6 +80,15 @@ This Rust project aims to implement various data structures and algorithms to he
    - DFS Strongly Connected Components: An algorithm to find all the connected vertices in a directed graph. It uses depth-first seach approach to traverse the graph
    - Dijkstra's Shortest Path: An algorithm to find the shortest distanced path between two vertices in a graph. It uses a priority queue to keep track of the vertices to visit next.
 
+11. Practices
+   - Consistent Hashing: A technique used to distribute data across a set of nodes in a way that minimizes the reorganization of data when nodes are added or removed. It is commonly used in distributed systems to achieve load balancing and fault tolerance.
+   - Least Recently Used: An eviction policy used in caching mechanisms to remove the least recently accessed items when the cache reaches its capacity. This helps in keeping the most frequently accessed items in the cache.
+   - Trie: A tree-like data structure used to store a dynamic set of strings. It is commonly used for efficient retrieval of keys in a dataset of strings, such as autocomplete and spell-checking.
+   - Edit Distance: A measure of the similarity between two strings, defined as the minimum number of operations (insertions, deletions, or substitutions) required to transform one string into the other. The Levenshtein distance is a common example of edit distance.
+   - Filters: Data structures used to test whether an element is a member of a set. Bloom filters are a common type of filter that allows for efficient membership testing with a small probability of false positives.
+   - Base58: An encoding scheme used to represent binary data in a human-readable format. It is commonly used in applications like Bitcoin addresses to avoid ambiguous characters and improve readability.
+   - Blockchain: This is a simple implementation of a blockchain. A blockchain is a decentralized and distributed digital ledger used to record transactions across multiple computers. It ensures the integrity and security of data through cryptographic hashing and consensus mechanisms.
+
 ## Usage
 
 To use these functionalities, simply import the respective modules into your Rust code and utilize the provided functions. Example usage is provided in each module's documentation.
